@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamIPStore", "CamIPStore\CamIPStore.csproj", "{396E193A-CEEF-465E-83EE-97B778D7EAF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamIPStore.WebApp", "CamIPStore\CamIPStore.WebApp.csproj", "{396E193A-CEEF-465E-83EE-97B778D7EAF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CamIPStore.Data", "CamIPStore.Data\CamIPStore.Data.csproj", "{3C0F1434-8EC3-44AA-9597-BA34E666FC32}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{396E193A-CEEF-465E-83EE-97B778D7EAF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{396E193A-CEEF-465E-83EE-97B778D7EAF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{396E193A-CEEF-465E-83EE-97B778D7EAF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C0F1434-8EC3-44AA-9597-BA34E666FC32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C0F1434-8EC3-44AA-9597-BA34E666FC32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C0F1434-8EC3-44AA-9597-BA34E666FC32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C0F1434-8EC3-44AA-9597-BA34E666FC32}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
