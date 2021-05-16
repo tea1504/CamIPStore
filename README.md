@@ -1,5 +1,16 @@
 ﻿# CamIPStore
-## Cách tạo branch
+> Giới thiệu
+
+Đây là đồ án môn học phát triển ứng dụng web với .NET (TN230)<br>
+CamIPStore là một website bán CameraIP
+> Thành viên
+
+1. B1809127	Trần Văn Hòa
+2. B1809217	Trần Phong Bão
+3. B1809231	Đoàn Huỳnh Giao
+4. B1809293	Trịnh Thanh Thảo
+5. B1809538	Lâm Thị Băng Tuyền
+## Qui ước đặt tên branch
 1. <b>Khi tạo mới một chức năng</b>: ```features/<ten_chuc_nang>```<br/>
 2. <b>Khi cập nhật một chức năng</b>: ```update/<ten_chuc_nang>```<br/>
 3. <b>Khi fix bug một chức năng</b>: ```fixbug/<ten_chuc_nang>```<br/>
@@ -8,6 +19,10 @@ Không sử dụng nhánh master chỉ merge vào develop <br/>
 Nhánh sau khi pull request sẽ không sử dụng lại nữa <br/>
 ## Cơ sở dữ liệu
 <img src="158383623_1170461673384374_2651382172081596466_n.png" /><br />
+## Lệnh để migration cơ sở dữ liệu
+```
+migrate
+```
 ## Tài liệu tham khảo
 - Playlist hướng dẫn ASP.NET Core [Làm dự án với ASP.NET Core 3.1](https://www.youtube.com/playlist?list=PLRhlTlpDUWsyN_FiVQrDWMtHix_E2A_UD).
 - Video hướng dẫn sử dụng Git và GitHub [Cách sử dụng Git trong THỰC TẾ | Github](https://youtu.be/O5uT6p6VWjY)
