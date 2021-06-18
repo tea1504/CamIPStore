@@ -10,6 +10,7 @@ CamIPStore là một website bán CameraIP
 3. B1809231	Đoàn Huỳnh Giao
 4. B1809293	Trịnh Thanh Thảo
 5. B1809538	Lâm Thị Băng Tuyền
+6. B1809310 Võ Hoàng Bảo Trâm
 ## Qui ước đặt tên branch
 1. <b>Khi tạo mới một chức năng</b>: ```features/<ten_chuc_nang>```<br/>
 2. <b>Khi cập nhật một chức năng</b>: ```update/<ten_chuc_nang>```<br/>
@@ -63,5 +64,38 @@ migrate
     <td>Đoàn Huỳnh Giao</td>
     <td>Học sử dụng git<br>Tìm teamplate<br>Tham gia vào dự án</td>
     <td align="center">:heavy_check_mark:</td>
+  </tr>
+  <tr>
+    <td rowspan="6">Buổi 2</td>
+    <td>Trần Văn Hòa</td>
+    <td>Chuẩn bị layout admin và user</td>
+    <td align="center">:date: 19/6/2021</td>
+    <td rowspan="6" align="center">19:45 - 20:15<br>18/06/2021</td>
+    <td rowspan="6">online</td>
+  </tr>
+  <tr>
+    <td>Trần Phong Bão</td>
+    <td></td>
+    <td align="center"></td>
+  </tr>
+  <tr>
+    <td>Trịnh Thanh Thảo</td>
+    <td>KHÔNG HỌP</td>
+    <td align="center"></td>
+  </tr>
+  <tr>
+    <td>Lâm Thị Băng Tuyền</td>
+    <td>Migration dữ liệu</td>
+    <td align="center">:date: 19/6/2021</td>
+  </tr>
+  <tr>
+    <td>Đoàn Huỳnh Giao</td>
+    <td></td>
+    <td align="center"></td>
+  </tr>
+  <tr>
+    <td>Võ Hoàng Bảo Trâm</td>
+    <td>Mới vô</td>
+    <td align="center"></td>
   </tr>
 </table>
