@@ -21,9 +21,11 @@ namespace CamIPStore.DB.Migrations
 
             modelBuilder.Entity("Entities.Camera", b =>
                 {
-                    b.Property<int>("IdNSX")
-                        .HasColumnName("IdNSX")
-                        .HasColumnType("int");
+                    b.Property<int>("IdCam")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IdCam")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("AmThanh")
                         .HasColumnName("AmThanh")
@@ -65,11 +67,9 @@ namespace CamIPStore.DB.Migrations
                         .HasColumnName("GiaGoc")
                         .HasColumnType("real");
 
-                    b.Property<int>("IdCam")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IdCam")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("IdNSX")
+                        .HasColumnName("IdNSX")
+                        .HasColumnType("int");
 
                     b.Property<string>("KhoangCach")
                         .HasColumnName("KhoangCach")
@@ -96,7 +96,9 @@ namespace CamIPStore.DB.Migrations
                         .HasColumnName("XuatXu")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdNSX");
+                    b.HasKey("IdCam");
+
+                    b.HasIndex("IdNSX");
 
                     b.ToTable("Camera");
                 });
@@ -168,23 +170,23 @@ namespace CamIPStore.DB.Migrations
                 {
                     b.Property<int>("IdHinh")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("Id Hình")
+                        .HasColumnName("IdHinh")
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("IdCam")
-                        .HasColumnName("Id Cam")
-                        .HasColumnType("int");
 
                     b.Property<bool>("HinhDaiDien")
                         .HasColumnName("HinhDaiDien")
                         .HasColumnType("bit");
 
+                    b.Property<int>("IdCam")
+                        .HasColumnName("IdCam")
+                        .HasColumnType("int");
+
                     b.Property<string>("Link")
                         .HasColumnName("Link")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("IdHinh", "IdCam");
+                    b.HasKey("IdHinh");
 
                     b.HasIndex("IdCam");
 
@@ -193,9 +195,11 @@ namespace CamIPStore.DB.Migrations
 
             modelBuilder.Entity("Entities.HoaDon", b =>
                 {
-                    b.Property<int>("IdTK")
-                        .HasColumnName("IdTK")
-                        .HasColumnType("int");
+                    b.Property<int>("IdHD")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("IdHD")
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("BaoHanh")
                         .HasColumnName("BaoHanh")
@@ -204,11 +208,9 @@ namespace CamIPStore.DB.Migrations
                     b.Property<string>("GhiChu")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdHD")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnName("IdHD")
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("IdTK")
+                        .HasColumnName("IdTK")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("NgayLap")
                         .HasColumnName("NgayLap")
@@ -226,7 +228,9 @@ namespace CamIPStore.DB.Migrations
                         .HasColumnName("TrangThai")
                         .HasColumnType("int");
 
-                    b.HasKey("IdTK");
+                    b.HasKey("IdHD");
+
+                    b.HasIndex("IdTK");
 
                     b.ToTable("HoaDon");
                 });
@@ -240,7 +244,7 @@ namespace CamIPStore.DB.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DenNgay")
-                        .HasColumnName("Đến Ngày")
+                        .HasColumnName("DenNgay")
                         .HasColumnType("datetime");
 
                     b.Property<int>("PhanTramGiam")
@@ -253,7 +257,7 @@ namespace CamIPStore.DB.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TuNgay")
-                        .HasColumnName("Từ Ngày")
+                        .HasColumnName("TuNgay")
                         .HasColumnType("datetime");
 
                     b.HasKey("IdKM");

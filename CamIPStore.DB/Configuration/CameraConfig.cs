@@ -14,7 +14,6 @@ namespace Configuration
         {
             builder.ToTable("Camera");
             builder.HasKey(k => k.IdCam);
-            builder.HasKey(k => new { k.IdNSX });
             builder.HasOne(k => k.NhaSanXuat).WithMany(a => a.DsCamera).HasForeignKey(a => a.IdNSX);
             builder.Property(k => k.Ten).IsRequired();
             builder.Property(k => k.IdCam).HasColumnName("IdCam").IsRequired().ValueGeneratedOnAdd();

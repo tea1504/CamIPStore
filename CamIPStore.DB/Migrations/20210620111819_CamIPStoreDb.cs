@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CamIPStore.DB.Migrations
 {
-    public partial class CamIPDb : Migration
+    public partial class CamIPStoreDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,8 +15,8 @@ namespace CamIPStore.DB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     TenKM = table.Column<string>(nullable: false),
                     PhanTramGiam = table.Column<int>(nullable: false),
-                    TừNgày = table.Column<DateTime>(name: "Từ Ngày", type: "datetime", nullable: false),
-                    ĐếnNgày = table.Column<DateTime>(name: "Đến Ngày", type: "datetime", nullable: false)
+                    TuNgay = table.Column<DateTime>(type: "datetime", nullable: false),
+                    DenNgay = table.Column<DateTime>(type: "datetime", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -60,9 +60,9 @@ namespace CamIPStore.DB.Migrations
                 name: "Camera",
                 columns: table => new
                 {
-                    IdNSX = table.Column<int>(nullable: false),
                     IdCam = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IdNSX = table.Column<int>(nullable: false),
                     TenCamera = table.Column<string>(nullable: false),
                     XuatXu = table.Column<string>(nullable: true),
                     CamBien = table.Column<string>(nullable: true),
@@ -82,7 +82,7 @@ namespace CamIPStore.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Camera", x => x.IdNSX);
+                    table.PrimaryKey("PK_Camera", x => x.IdCam);
                     table.ForeignKey(
                         name: "FK_Camera_NhaSanXuat_IdNSX",
                         column: x => x.IdNSX,
@@ -95,9 +95,9 @@ namespace CamIPStore.DB.Migrations
                 name: "HoaDon",
                 columns: table => new
                 {
-                    IdTK = table.Column<int>(nullable: false),
                     IdHD = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    IdTK = table.Column<int>(nullable: false),
                     NgayTao = table.Column<DateTime>(type: "datetime", nullable: false),
                     TongGia = table.Column<float>(nullable: false),
                     BaoHanh = table.Column<int>(nullable: false),
@@ -107,7 +107,7 @@ namespace CamIPStore.DB.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HoaDon", x => x.IdTK);
+                    table.PrimaryKey("PK_HoaDon", x => x.IdHD);
                     table.ForeignKey(
                         name: "FK_HoaDon_TaiKhoan_IdTK",
                         column: x => x.IdTK,
@@ -130,7 +130,7 @@ namespace CamIPStore.DB.Migrations
                         name: "FK_ChiTietKhuyenMai_Camera_IdCam",
                         column: x => x.IdCam,
                         principalTable: "Camera",
-                        principalColumn: "IdNSX",
+                        principalColumn: "IdCam",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ChiTietKhuyenMai_KhuyenMai_IdKM",
@@ -155,7 +155,7 @@ namespace CamIPStore.DB.Migrations
                         name: "FK_GioHang_Camera_IdCam",
                         column: x => x.IdCam,
                         principalTable: "Camera",
-                        principalColumn: "IdNSX",
+                        principalColumn: "IdCam",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_GioHang_TaiKhoan_IdTK",
@@ -169,20 +169,20 @@ namespace CamIPStore.DB.Migrations
                 name: "Hinh",
                 columns: table => new
                 {
-                    IdHình = table.Column<int>(name: "Id Hình", nullable: false)
+                    IdHinh = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdCam = table.Column<int>(name: "Id Cam", nullable: false),
+                    IdCam = table.Column<int>(nullable: false),
                     Link = table.Column<string>(nullable: true),
                     HinhDaiDien = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hinh", x => new { x.IdHình, x.IdCam });
+                    table.PrimaryKey("PK_Hinh", x => x.IdHinh);
                     table.ForeignKey(
-                        name: "FK_Hinh_Camera_Id Cam",
+                        name: "FK_Hinh_Camera_IdCam",
                         column: x => x.IdCam,
                         principalTable: "Camera",
-                        principalColumn: "IdNSX",
+                        principalColumn: "IdCam",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -202,15 +202,20 @@ namespace CamIPStore.DB.Migrations
                         name: "FK_ChiTietHoaDon_Camera_IdCam",
                         column: x => x.IdCam,
                         principalTable: "Camera",
-                        principalColumn: "IdNSX",
+                        principalColumn: "IdCam",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ChiTietHoaDon_HoaDon_IdHD",
                         column: x => x.IdHD,
                         principalTable: "HoaDon",
-                        principalColumn: "IdTK",
+                        principalColumn: "IdHD",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Camera_IdNSX",
+                table: "Camera",
+                column: "IdNSX");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChiTietHoaDon_IdHD",
@@ -228,9 +233,14 @@ namespace CamIPStore.DB.Migrations
                 column: "IdTK");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Hinh_Id Cam",
+                name: "IX_Hinh_IdCam",
                 table: "Hinh",
-                column: "Id Cam");
+                column: "IdCam");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_HoaDon_IdTK",
+                table: "HoaDon",
+                column: "IdTK");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

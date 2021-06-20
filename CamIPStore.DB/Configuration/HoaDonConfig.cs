@@ -14,7 +14,6 @@ namespace Configuration
         {
             builder.ToTable("HoaDon");
             builder.HasKey(a => a.IdHD);
-            builder.HasKey(a => new {  a.IdTK });
             builder.HasOne(a=> a.TaiKhoan).WithMany(b => b.DsHoaDon).HasForeignKey(b => b.IdTK);
             builder.Property(a => a.IdHD).HasColumnName("IdHD").IsRequired().ValueGeneratedOnAdd();
             builder.Property(a => a.IdTK).HasColumnName("IdTK").IsRequired();
