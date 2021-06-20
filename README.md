@@ -22,7 +22,7 @@ Nhánh sau khi pull request sẽ không sử dụng lại nữa <br/>
 <img src="158383623_1170461673384374_2651382172081596466_n.png" /><br />
 ## Lệnh để migration cơ sở dữ liệu
 ```
-migrate
+update-database
 ```
 ## Tài liệu tham khảo
 - Playlist hướng dẫn ASP.NET Core [Làm dự án với ASP.NET Core 3.1](https://www.youtube.com/playlist?list=PLRhlTlpDUWsyN_FiVQrDWMtHix_E2A_UD).
