@@ -19,7 +19,7 @@ namespace Configuration
             builder.Property(s => s.PhanTramGiam).HasColumnName("PhanTramGiam");
             builder.Property(s => s.TuNgay).HasColumnName("TuNgay").HasColumnType("datetime"); ;
             builder.Property(s => s.DenNgay).HasColumnName("DenNgay").HasColumnType("datetime"); ;
-        
+            builder.Property(s => s.Banner).HasColumnName("Banner");
         }
     }
 }

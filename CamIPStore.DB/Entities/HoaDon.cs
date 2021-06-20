@@ -14,9 +14,7 @@ namespace Entities
         public TaiKhoan TaiKhoan { get; set; }
         public DateTime NgayTao { get; set; }
         public float TongGia { get; set; }
-        public int BaoHanh { get; set; }
         public string GhiChu { get; set; }
-        public DateTime NgayLap { get; set; }
         public int TrangThai { get; set; }
         public List<ChiTietHoaDon> DsChiTietHoaDon { get; set; }
     }

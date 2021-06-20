@@ -14,6 +14,7 @@ namespace Entities
         public int PhanTramGiam { get; set; }
         public DateTime TuNgay { get; set; }
         public DateTime DenNgay { get; set; }
+        public string Banner { get; set; }
         public List<ChiTietKhuyenMai> DsChiTietKhuyenMai { get; set; }
     }
 }

@@ -17,11 +17,9 @@ namespace Configuration
             builder.HasOne(a=> a.TaiKhoan).WithMany(b => b.DsHoaDon).HasForeignKey(b => b.IdTK);
             builder.Property(a => a.IdHD).HasColumnName("IdHD").IsRequired().ValueGeneratedOnAdd();
             builder.Property(a => a.IdTK).HasColumnName("IdTK").IsRequired();
-            builder.Property(a => a.NgayLap).HasColumnName("NgayLap").HasColumnType("datetime"); ;
             builder.Property(a => a.NgayTao).HasColumnName("NgayTao").HasColumnType("datetime"); ;
             builder.Property(a => a.TongGia).HasColumnName("TongGia");
             builder.Property(a => a.TrangThai).HasColumnName("TrangThai");
-            builder.Property(a => a.BaoHanh).HasColumnName("BaoHanh");
         }
     }
 }
