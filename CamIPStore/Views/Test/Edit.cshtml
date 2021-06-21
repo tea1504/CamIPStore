@@ -1,0 +1,124 @@
+﻿@model Entities.TaiKhoan
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
+}
+
+@section Style{ }
+
+<h1>Edit</h1>
+
+<h4>TaiKhoan</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IdTK" class="control-label"></label>
+                <input asp-for="IdTK" class="form-control" disabled />
+                <span asp-validation-for="IdTK" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SDT" class="control-label"></label>
+                <input asp-for="SDT" class="form-control" />
+                <span asp-validation-for="SDT" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiaChi" class="control-label"></label>
+                <input asp-for="DiaChi" class="form-control" />
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HoTen" class="control-label"></label>
+                <input asp-for="HoTen" class="form-control" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuyenSD" class="control-label"></label>
+                @if (Model.QuyenSD)
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="QuyenSD" class="form-check-input" value=false id="QuyenSD1" checked />
+                        <label class="form-check-label" for="QuyenSD1">
+                            Người dùng
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" asp-for="QuyenSD" class="form-check-input" value=true id="QuyenSD2" />
+                        <label class="form-check-label" for="QuyenSD2">
+                            Quản trị viên
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="QuyenSD" class="form-check-input" value=false id="QuyenSD1" />
+                        <label class="form-check-label" for="QuyenSD1">
+                            Người dùng
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" asp-for="QuyenSD" class="form-check-input" value=true id="QuyenSD2" checked />
+                        <label class="form-check-label" for="QuyenSD2">
+                            Quản trị viên
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label asp-for="TrangThai" class="control-label"></label>
+                @if (Model.TrangThai)
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="TrangThai" class="form-check-input" value=false id="TrangThai1" />
+                        <label class="form-check-label" for="QuyenSD1">
+                            Bị khóa
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" asp-for="TrangThai" class="form-check-input" value=true id="TrangThai2" checked />
+                        <label class="form-check-label" for="QuyenSD2">
+                            Đang sử dụng
+                        </label>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-check">
+                        <input type="radio" asp-for="TrangThai" class="form-check-input" value=false id="TrangThai1" checked />
+                        <label class="form-check-label" for="QuyenSD1">
+                            Bị khóa
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" asp-for="TrangThai" class="form-check-input" value=true id="TrangThai2" />
+                        <label class="form-check-label" for="QuyenSD2">
+                            Đang sử dụng
+                        </label>
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Script{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+}
+
