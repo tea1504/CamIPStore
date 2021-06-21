@@ -27,6 +27,7 @@ update-database
 ## Tài liệu tham khảo
 - Playlist hướng dẫn ASP.NET Core [Làm dự án với ASP.NET Core 3.1](https://www.youtube.com/playlist?list=PLRhlTlpDUWsyN_FiVQrDWMtHix_E2A_UD).
 - Video hướng dẫn sử dụng Git và GitHub [Cách sử dụng Git trong THỰC TẾ | Github](https://youtu.be/O5uT6p6VWjY)
+- Tài liệu học EntityFramework Core [Link](https://www.entityframeworktutorial.net/efcore/entity-framework-core.aspx)
 ## Nhật ký làm việc
 <table>
   <tr>
