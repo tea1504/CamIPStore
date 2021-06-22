@@ -9,8 +9,16 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Đây là trang chủ</h1>
+            <button onclick="alo()" class="btn btn-danger">alo</button>
         </div>
     </div>
 </div>
 
-@section Script{ }
+@section Script{
+    <script src="~/Assets/User/vendor/sweetalert/sweetalert.min.js"></script>
+    <script>
+        function alo() {
+            swal("Hello world!");
+        }
+    </script>
+}
