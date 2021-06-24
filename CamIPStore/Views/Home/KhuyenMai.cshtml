@@ -1,0 +1,43 @@
+﻿@model Entities.KhuyenMai
+
+@{
+    ViewData["Title"] = "KhuyenMai";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@section Style{
+<style>
+    #banner {
+        background-image: url(/Assets/User/images/slide-01.jpg);
+        margin-top: -80px;
+    }
+</style>
+ }
+<div class="item-slick1" id="banner">
+    <div class="container h-full">
+        <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+            <span class="ltext-101 cl2 respon2 timeFormat" data-tungay="@Model.TuNgay" data-denngay="@Model.DenNgay">
+
+            </span>
+            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
+                @Model.TenKM
+            </h2>
+        </div>
+    </div>
+</div>
+<div class="container">
+
+</div>
+@section Script{
+<script>
+    function formatDate(val) {
+        var arrDate = val.split('/');
+        var date = new Date(arrDate[2].slice(0, 4), eval(arrDate[1]) - 1, arrDate[0]);
+        return date.toLocaleDateString("vn");
+    }
+    $(".timeFormat").each(function () {
+        var tuNgay = $(this).data("tungay");
+        var denNgay = $(this).data("denngay");
+        $(this).html(formatDate(tuNgay) + " - " + formatDate(denNgay));
+    })
+</script>
+ }

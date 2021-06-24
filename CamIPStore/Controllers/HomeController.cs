@@ -1,6 +1,7 @@
 ﻿using CamIPStore.Models;
 using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace CamIPStore.Controllers
         {
             var compareDate = DateTime.Now;
             ViewBag.slider = _context.KhuyenMai.Where(km => km.DenNgay >= compareDate).ToList();
+            ViewBag.banner = _context.NhaSanXuat.ToList();
             return View();
         }
 
@@ -38,9 +40,17 @@ namespace CamIPStore.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult GetSlider()
+        public async Task<IActionResult> KhuyenMai(int? id)
         {
-            return PartialView("_Slider");
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var list = await _context.KhuyenMai
+                .Include(km => km.DsChiTietKhuyenMai)
+                .ThenInclude(ctkm => ctkm.Camera)
+                .SingleOrDefaultAsync(km => km.IdKM == id);
+            return View(list);
         }
     }
 }

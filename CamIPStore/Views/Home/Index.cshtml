@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 @section Style{ }
-<section class="section-slide">
+<section class="section-slide" style="margin-top: -80px">
 <div class="wrap-slick1">
     <div class="slick1">
         @foreach (var item in ViewBag.slider)
@@ -38,8 +38,28 @@
 </section>
 <div class="sec-banner bg0 p-t-80 p-b-50">
     <div class="container">
-        <div class="row" id="banner">
+        <div class="row">
+            @foreach (var item in ViewBag.banner)
+            {
+            <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
+                <div class="block1 wrap-pic-w">
+                    <img src="http://placehold.it/500x500" alt="IMG-BANNER">
+                    <a href="@Url.Action("Index", "PhanLoai", new { id = item.IdNSX })" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
+                        <div class="block1-txt-child1 flex-col-l">
+                            <span class="block1-name ltext-102 trans-04 p-b-8">
+                                @item.TenNSX
+                            </span>
+                        </div>
 
+                        <div class="block1-txt-child2 p-b-4 trans-05">
+                            <div class="block1-link stext-101 cl0 trans-09">
+                                Shop Now
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            }
         </div>
     </div>
 </div>
@@ -59,46 +79,6 @@
         function alo() {
             swal("Hello world!");
         }
-        $.ajax({
-            method: "GET",
-            url: "/Api/NhaSanXuat",
-        })
-            .done(function (data) {
-                var bannerHtml = $("#banner").html("");
-                data.forEach(e => {
-                    bannerHtml.append(
-                        `
-                                    <div class="col-md-6 col-xl-4 p-b-30 m-lr-auto">
-                                        <div class="block1 wrap-pic-w">
-                                            <img src="http://placehold.it/500x500" alt="IMG-BANNER">
-                                            <a href="/PhanLoai/Index/${e.idNSX}" class="block1-txt ab-t-l s-full flex-col-l-sb p-lr-38 p-tb-34 trans-03 respon3">
-                                                <div class="block1-txt-child1 flex-col-l">
-                                                    <span class="block1-name ltext-102 trans-04 p-b-8">
-                                                        ${e.tenNSX}
-                                                    </span>
-
-                                                    <span class="block1-info stext-102 trans-04">
-                                                        Spring 2018
-                                                    </span>
-                                                </div>
-
-                                                <div class="block1-txt-child2 p-b-4 trans-05">
-                                                    <div class="block1-link stext-101 cl0 trans-09">
-                                                        Shop Now
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                `
-                    );
-                });
-            })
-            .fail(function (err) {
-                swal("Error", err.statusText, "error");
-            })
-            .always(function () {
-            });
         function formatDate(val) {
             var arrDate = val.split('/');
             var date = new Date(arrDate[2].slice(0, 4), eval(arrDate[1]) - 1, arrDate[0]);
