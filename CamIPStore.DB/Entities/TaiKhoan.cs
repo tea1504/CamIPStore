@@ -19,16 +19,16 @@ namespace Entities
         [Required(ErrorMessage = "Mật khẩu không được bỏ trống")]
         public string MatKhau { get; set; }
         [Display(Name = "Số điện thoại")]
-        [Required(ErrorMessage = "Số điện thoại không được bỏ trống")]
+       //[Required(ErrorMessage = "Số điện thoại không được bỏ trống")]
         public string SDT { get; set; }
         [Display(Name = "Địa chỉ")]
-        [Required(ErrorMessage = "Địa chỉ không được bỏ trống")]
+        // [Required(ErrorMessage = "Địa chỉ không được bỏ trống")]
         public string DiaChi { get; set; }
         [Display(Name = "Địa chỉ email")]
-        [Required(ErrorMessage = "Địa chỉ email không được bỏ trống")]
+        // [Required(ErrorMessage = "Địa chỉ email không được bỏ trống")]
         public string Email { get; set; }
         [Display(Name = "Họ và tên")]
-        [Required(ErrorMessage = "Họ tên không được bỏ trống")]
+        // [Required(ErrorMessage = "Họ tên không được bỏ trống")]
         public string HoTen { get; set; }
         [Display(Name = "Quyền sử dụng")]
         public bool QuyenSD { get; set; }
