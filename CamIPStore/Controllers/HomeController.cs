@@ -1,4 +1,5 @@
 ﻿using CamIPStore.Models;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +13,18 @@ namespace CamIPStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPShopDBContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPShopDBContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var compareDate = DateTime.Now;
+            ViewBag.slider = _context.KhuyenMai.Where(km => km.DenNgay >= compareDate).ToList();
             return View();
         }
 
@@ -32,6 +37,10 @@ namespace CamIPStore.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public IActionResult GetSlider()
+        {
+            return PartialView("_Slider");
         }
     }
 }

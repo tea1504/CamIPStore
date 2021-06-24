@@ -43,20 +43,9 @@
 
     <!-- Cart -->
     @Html.Partial("_Cart.cshtml")
-
-    <!-- Slider -->
-    @Html.Partial("_Slider.cshtml")
-
-    <!-- Banner -->
-    @Html.Partial("_Banner.cshtml")
-
-    <!--Body-->
-    <section class="bg0 p-t-23 p-b-140">
-        <div class="container">
-            @RenderBody()
-        </div>
+    <section class="bg0 p-t-80 p-b-140">
+        @RenderBody()
     </section>
-
 
     <!-- Footer -->
     @Html.Partial("_Footer.cshtml")
