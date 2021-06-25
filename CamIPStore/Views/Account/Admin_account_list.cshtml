@@ -1,0 +1,79 @@
+﻿@model IEnumerable<Entities.TaiKhoan>
+
+@{
+    ViewData["Title"] = "List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                Tài khoản
+            </th>
+            <th>
+                Tên
+            </th>
+            <th>
+                Số điện thoại
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Địa chỉ
+            </th>
+            <th>
+                Quyền sử dụng
+            </th>
+            <th>
+                Trạng thái
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdTK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenTK)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HoTen)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SDT)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DiaChi)
+            </td>
+            <td>                
+                @(item.QuyenSD ? "Admin" : "Khách")
+            </td>
+            <td>
+                @(item.QuyenSD ? "Đang sd" : "Khóa")
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdTK">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdTK">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdTK">Delete</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
