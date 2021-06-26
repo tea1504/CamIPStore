@@ -49,6 +49,7 @@ namespace CamIPStore.Controllers
             var list = await _context.KhuyenMai
                 .Include(km => km.DsChiTietKhuyenMai)
                 .ThenInclude(ctkm => ctkm.Camera)
+                .ThenInclude(c => c.DsHinh)
                 .SingleOrDefaultAsync(km => km.IdKM == id);
             return View(list);
         }
