@@ -1,0 +1,101 @@
+﻿@model Entities.KhuyenMai
+
+@{
+    ViewData["Title"] = "KhuyenMai";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+@section Style{
+<style>
+    #banner {
+        background-image: url(/Assets/User/images/slide-01.jpg);
+        margin-top: -80px;
+    }
+</style>
+ }
+<div class="item-slick1" id="banner">
+    <div class="container h-full">
+        <div class="flex-col-l-m h-full p-t-100 p-b-30 respon5">
+            <span class="ltext-101 cl2 respon2 timeFormat" data-tungay="@Model.TuNgay" data-denngay="@Model.DenNgay">
+
+            </span>
+            <h2 class="ltext-201 cl2 p-t-19 p-b-43 respon1">
+                @Model.TenKM
+            </h2>
+        </div>
+    </div>
+</div>
+<div class="container p-t-10">
+    <div class="p-b-10">
+        <h3 class="ltext-103 cl5">
+            Sản phẩm
+        </h3>
+    </div>
+    <div class="row isotope-grid">
+        @foreach (var item in Model.DsChiTietKhuyenMai)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                <div class="block2">
+                    <div class="block2-pic hov-img0">
+
+                        @{ var link = "http://placehold.it/250x250"; }
+                        @foreach (var img in item.Camera.DsHinh)
+                        {
+                            @if (img.HinhDaiDien)
+                            {
+                                 link = img.Link;
+                            }
+                        }
+                        <img src="@link" alt="IMG-PRODUCT">
+
+                        <a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+                            Xem nhanh
+                        </a>
+                    </div>
+
+                    <div class="block2-txt flex-w flex-t p-t-14">
+                        <div class="block2-txt-child1 flex-col-l ">
+                            <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                @item.Camera.Ten
+                            </a>
+
+                            <span class="stext-105 cl3 money" data-money="@item.Camera.GiaBan">
+                                @item.Camera.GiaBan
+                            </span>
+                        </div>
+
+                        <div class="block2-txt-child2 flex-r p-t-3">
+                            <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                <img class="icon-heart1 dis-block trans-04" src="~/Assets/User/images/icons/icon-heart-01.png" alt="ICON">
+                                <img class="icon-heart2 dis-block trans-04 ab-t-l" src="~/Assets/User/images/icons/icon-heart-02.png" alt="ICON">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section Script{
+<script>
+    $(document).ready(function () {
+        function formatDate(val) {
+            var arrDate = val.split('/');
+            var date = new Date(arrDate[2].slice(0, 4), eval(arrDate[1]) - 1, arrDate[0]);
+            return date.toLocaleDateString("vn");
+        }
+        $(".timeFormat").each(function () {
+            var tuNgay = $(this).data("tungay");
+            var denNgay = $(this).data("denngay");
+            $(this).html(formatDate(tuNgay) + " - " + formatDate(denNgay));
+        });
+        function formatMoney(val) {
+            var formatter = new Intl.NumberFormat();
+            return formatter.format(val) + " VNĐ";
+        }
+        $(".money").each(function () {
+            var money = $(this).data("money");
+            $(this).html(formatMoney(money));
+        });
+    });
+</script>
+ }

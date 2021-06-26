@@ -122,5 +122,10 @@ namespace CamIPStore.WebApp.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> ApiTest()
+        {
+            return Ok(await _context.NhaSanXuat.ToListAsync());
+        }
     }
 }
