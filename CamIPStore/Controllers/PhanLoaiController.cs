@@ -19,11 +19,15 @@ namespace CamIPStore.WebApp.Controllers
         {
             if(id == null)
             {
-                return NotFound();
+                return View(_context.Cameras.Include(c => c.DsHinh).ToList());
             }
-            var list = _context.Cameras.Where(c => c.IdNSX == id).ToList();
+            var list = _context.Cameras.Where(c => c.IdNSX == id).Include(c => c.DsHinh).ToList();
             return View(list);
         }
-
+        public IActionResult GetPartial(int id)
+        {
+            var cam = _context.Cameras.Include(c => c.DsHinh).SingleOrDefault(c => c.IdCam == id);
+            return PartialView("_Model", cam);
+        }
     }
 }

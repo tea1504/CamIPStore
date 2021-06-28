@@ -27,5 +27,14 @@ namespace CamIPStore.WebApp.Controllers
             var list =  _context.KhuyenMai.Where(km => km.DenNgay >= compareDate).ToList();
             return Ok(list);
         }
+
+        public IActionResult getCamera(int id)
+        {
+            var camera = _context
+                .Cameras
+                .Include(c => c.DsHinh)
+                .SingleOrDefault(c => c.IdCam == id);
+            return Ok(camera);
+        }
     }
 }
