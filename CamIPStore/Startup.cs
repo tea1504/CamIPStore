@@ -28,6 +28,8 @@ namespace CamIPStore
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddDbContext<IPShopDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CamIPStore")));
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +51,7 @@ namespace CamIPStore
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
