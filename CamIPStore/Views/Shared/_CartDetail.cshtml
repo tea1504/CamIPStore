@@ -1,0 +1,30 @@
+﻿@model IEnumerable<Entities.GioHang>
+@{ var total = 0.0; }
+@foreach (var item in Model)
+{
+    total += item.Sl * item.Camera.GiaBan;
+    var url = "http://placehold.it/200x300";
+    foreach (var img in item.Camera.DsHinh)
+    {
+        if (img.HinhDaiDien)
+            url = img.Link;
+    }
+    <li class="header-cart-item flex-w flex-t m-b-12">
+        <div class="header-cart-item-img">
+            <img src="@url" alt="IMG">
+        </div>
+
+        <div class="header-cart-item-txt p-t-8">
+            <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                @item.Camera.Ten
+            </a>
+
+            <span class="header-cart-item-info">
+                @item.Sl x @item.Camera.GiaBan
+            </span>
+        </div>
+    </li>
+}
+<div class="header-cart-total w-full p-tb-40">
+    Total: @total
+</div>
