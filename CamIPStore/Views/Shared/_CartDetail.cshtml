@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<Entities.GioHang>
+@using Microsoft.AspNetCore.Http;
 @{ var total = 0.0; }
 @foreach (var item in Model)
 {
@@ -10,7 +11,7 @@
             url = img.Link;
     }
     <li class="header-cart-item flex-w flex-t m-b-12">
-        <div class="header-cart-item-img">
+        <div data_idCam="@item.Camera.IdCam" class="DeleteCartItem header-cart-item-img">
             <img src="@url" alt="IMG">
         </div>
 
@@ -28,3 +29,23 @@
 <div class="header-cart-total w-full p-tb-40">
     Total: @total
 </div>
+<script>
+    $(".DeleteCartItem").click(function (e) {
+        var IdKH = '@Context.Session.GetInt32("UserID")';
+        var IdCam = $(this)[0].getAttribute("data_idCam");
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("DeteleCartItem","Cart")',
+            data: {
+                IdTK: IdKH,
+                IdCam: IdCam
+            }
+        })
+            .done(function (e) {
+                if (e == 0) {
+                    swal("Lỗi", "Không thể xóa", "error");
+                }
+                $(".header-cart-wrapitem.w-full").load("/Cart/GetCartDetail/" + IdKH);
+            })
+    });
+</script>

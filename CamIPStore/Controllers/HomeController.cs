@@ -53,15 +53,5 @@ namespace CamIPStore.Controllers
                 .SingleOrDefaultAsync(km => km.IdKM == id);
             return View(list);
         }
-        public IActionResult GetCartDetail(int id)
-        {
-            var list = _context
-                .GioHang
-                .Where(gh => gh.IdTK == id)
-                .Include(gh => gh.Camera)
-                .ThenInclude(c => c.DsHinh)
-                .ToList();
-            return PartialView("_CartDetail", list);
-        }
     }
 }

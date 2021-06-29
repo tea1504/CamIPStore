@@ -1,5 +1,5 @@
 ﻿@model Entities.Camera
-
+@using Microsoft.AspNetCore.Http;
 
 <div class="row">
     <div class="col-md-6 col-lg-7 p-b-30">
@@ -9,10 +9,10 @@
                     <ul class="slick3-dots">
                         @foreach (var img in Model.DsHinh)
                         {
-                        <li role="presentation">
-                            <img src="@img.Link">
-                            <div class="slick3-dot-overlay"></div>
-                        </li>
+                            <li role="presentation">
+                                <img src="@img.Link">
+                                <div class="slick3-dot-overlay"></div>
+                            </li>
                         }
                     </ul>
                 </div>
@@ -58,8 +58,8 @@
                             </div>
                         </div>
 
-                        <button onclick="addCart()" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
-                            Add to cart
+                        <button onclick="addCart(@Model.IdCam)" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                            Thêm vào giỏ hàng
                         </button>
                     </div>
                 </div>
@@ -89,14 +89,32 @@
     </div>
 </div>
 <script>
-    function addCart() {
+    function addCart(id) {
         var amount = $("#num-product").val();
         var name = $("#modelName").html();
-        swal({
-            title: "Thêm thành công",
-            text: `Đã thêm sản phẩm ${name} số lượng ${amount} vào giỏ hàng thành công`,
-            icon: "success",
-        });
+        var idkh = '@Context.Session.GetInt32("UserID")';
+        console.log(id, idkh);
+        $.ajax({
+            url: '/Cart/AddCart',
+            method: "POST",
+            data: {
+                IdCam: id,
+                IdTK: idkh,
+                Sl: amount
+            }
+        })
+            .done(function (e) {
+                if (e == 1) {
+                    swal({
+                        title: "Thêm thành công",
+                        text: `Đã thêm sản phẩm ${name} số lượng ${amount} vào giỏ hàng thành công`,
+                        icon: "success",
+                    });
+                }
+            })
+            .fail(function (e) {
+                console.log(e);
+            });
     }
     function formatMoney(val) {
         var formatter = new Intl.NumberFormat();

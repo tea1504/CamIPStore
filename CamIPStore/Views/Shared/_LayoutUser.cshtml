@@ -162,8 +162,8 @@
     <script>
         $("#cartDestop").click(function (e) {
             var id = '@Context.Session.GetInt32("UserID")';
-            $(".header-cart-wrapitem.w-full").load("/Home/GetCartDetail/" + id);
-        })
+            $(".header-cart-wrapitem.w-full").load("/Cart/GetCartDetail/" + id);
+        });
     </script>
     @RenderSection("Script", true);
 </body>
