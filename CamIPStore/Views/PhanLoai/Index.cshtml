@@ -29,7 +29,7 @@
 
                         <div class="block2-txt flex-w flex-t p-t-14">
                             <div class="block2-txt-child1 flex-col-l ">
-                                <a href="product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                <a href="@Url.Action("ProductDetail", "Home", new { id = item.IdCam})" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                     @item.Ten
                                 </a>
 
@@ -58,17 +58,6 @@
         </div>
     </div>
 </div>
-<div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
-    <div class="overlay-modal1 js-hide-modal1"></div>
-    <div class="container">
-        <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
-            <button class="how-pos3 hov3 trans-04 js-hide-modal1">
-                <img src="/Assets/User/images/icons/icon-close.png" alt="CLOSE">
-            </button>
-            <div id="model"></div>
-        </div>
-    </div>
-</div>
 @section Script{
     <script>
         $(document).ready(function () {
@@ -81,10 +70,6 @@
                     var money = $(this).data("money");
                     $(this).html(formatMoney(money));
                 })
-            });
-            $(".btnShow").click(function () {
-                var id = $(this).data("id");
-                $("#model").load("/PhanLoai/GetPartial/" + id);
             });
         });
     </script>

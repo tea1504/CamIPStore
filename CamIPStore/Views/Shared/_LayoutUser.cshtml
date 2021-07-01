@@ -1,7 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>@ViewData["Title"] - CamIPStore</title>
+    <title>@ViewData["Title"] - CamIPStore &nbsp;</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--===============================================================================================-->
@@ -47,6 +48,17 @@
         @RenderBody()
     </section>
 
+    <div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
+        <div class="overlay-modal1 js-hide-modal1"></div>
+        <div class="container">
+            <div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
+                <button class="how-pos3 hov3 trans-04 js-hide-modal1">
+                    <img src="/Assets/User/images/icons/icon-close.png" alt="CLOSE">
+                </button>
+                <div id="model"></div>
+            </div>
+        </div>
+    </div>
     <!-- Footer -->
     @Html.Partial("_Footer.cshtml")
 
@@ -158,6 +170,22 @@
     </script>
     <!--===============================================================================================-->
     <script src="~/Assets/User/js/main.js"></script>
+    <script>
+        (function titleScroller(text) {
+            document.title = text;
+            setTimeout(function () {
+                titleScroller(text.substr(1) + text.substr(0, 1));
+            }, 500);
+        }(document.title));
+        $("#cartDestop").click(function (e) {
+            var id = '@Context.Session.GetInt32("UserID")';
+            $(".header-cart-wrapitem.w-full").load("/Cart/GetCartDetail/" + id);
+        });
+        $(".btnShow").click(function () {
+            var id = $(this).data("id");
+            $("#model").load("/PhanLoai/GetPartial/" + id);
+        });
+    </script>
     @RenderSection("Script", true);
 </body>
 </html>

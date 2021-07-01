@@ -30,7 +30,7 @@ namespace CamIPStore
                 .AddNewtonsoftJson(options =>
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
                 );
-                
+
             services.AddDbContext<IPShopDBContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CamIPStore")));
             services.AddDistributedMemoryCache();

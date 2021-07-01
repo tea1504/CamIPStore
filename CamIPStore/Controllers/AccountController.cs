@@ -1,6 +1,7 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace CamIPStore.WebApp.Controllers
                 if ((_db.TaiKhoan.Any(s => s.TenTK == model.TenTK)) && (_db.TaiKhoan.Any(s => s.MatKhau == model.MatKhau)))
                 {
                     HttpContext.Session.SetString("UserName", model.TenTK);
+                    var taiKhoan = _db.TaiKhoan.FirstOrDefault(s => s.TenTK == model.TenTK);
+                    HttpContext.Session.SetInt32("UserID", taiKhoan.IdTK);
                     if (_db.TaiKhoan.FirstOrDefault(s=>s.TenTK == model.TenTK).QuyenSD == false)
                             return RedirectToAction("Index", "Home");
                     
