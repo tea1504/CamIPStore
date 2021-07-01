@@ -1,5 +1,5 @@
 ﻿@model Entities.Camera
-
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = Model.Ten;
     Layout = "~/Views/Shared/_LayoutUser.cshtml";
@@ -37,7 +37,7 @@
 
             <div class="col-md-6 col-lg-5 p-b-30">
                 <div class="p-r-50 p-t-5 p-lr-0-lg">
-                    <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                    <h4 id="modelName" class="mtext-105 cl2 js-name-detail p-b-14">
                         @Model.Ten
                     </h4>
 
@@ -54,14 +54,14 @@
                                         <i class="fs-16 zmdi zmdi-minus"></i>
                                     </div>
 
-                                    <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product" value="1">
+                                    <input class="mtext-104 cl3 txt-center num-product" type="number" id="num-product" name="num-product" value="1">
 
                                     <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                         <i class="fs-16 zmdi zmdi-plus"></i>
                                     </div>
                                 </div>
 
-                                <button class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
+                                <button onclick="addCart(@Model.IdCam)" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail">
                                     Thêm vào giỏ hàng
                                 </button>
                             </div>
@@ -261,7 +261,7 @@
                 @foreach (var item in ViewBag.RelatedProduct)
                 {
                     var imgUrl = "http://placehold.it/200x200";
-                    @foreach(var img in item.DsHinh)
+                    @foreach (var img in item.DsHinh)
                     {
                         if (img.HinhDaiDien)
                         {
@@ -306,7 +306,33 @@
 </section>
 
 @section Script{
-<script>
-    
-</script>
+    <script>
+    function addCart(id) {
+        var amount = $("#num-product").val();
+        var name = $("#modelName").html();
+        var idkh = '@Context.Session.GetInt32("UserID")';
+        console.log(id, idkh);
+        $.ajax({
+            url: '/Cart/AddCart',
+            method: "POST",
+            data: {
+                IdCam: id,
+                IdTK: idkh,
+                Sl: amount
+            }
+        })
+            .done(function (e) {
+                if (e == 1) {
+                    swal({
+                        title: "Thêm thành công",
+                        text: `Đã thêm sản phẩm ${name} số lượng ${amount} vào giỏ hàng thành công`,
+                        icon: "success",
+                    });
+                }
+            })
+            .fail(function (e) {
+                console.log(e);
+            });
+    }
+    </script>
 }

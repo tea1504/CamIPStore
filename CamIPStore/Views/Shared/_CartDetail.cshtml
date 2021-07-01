@@ -16,17 +16,17 @@
         </div>
 
         <div class="header-cart-item-txt p-t-8">
-            <a href="#" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+            <a href="@Url.Action("ProductDetail", "Home", new { id = item.Camera.IdCam})" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
                 @item.Camera.Ten
             </a>
 
-            <span class="header-cart-item-info">
-                @item.Sl x @item.Camera.GiaBan
+            <span class="header-cart-item-info money" data-money="@item.Camera.GiaBan" data-sl="@item.Sl">
+                 
             </span>
         </div>
     </li>
 }
-<div class="header-cart-total w-full p-tb-40">
+<div id="TotalCard" data-money="@total" class="header-cart-total w-full p-tb-40">
     Total: @total
 </div>
 <script>
@@ -48,4 +48,14 @@
                 $(".header-cart-wrapitem.w-full").load("/Cart/GetCartDetail/" + IdKH);
             })
     });
+    function formatMoney(val) {
+        var formatter = new Intl.NumberFormat();
+        return formatter.format(val) + " VNĐ";
+    }
+    $(".money").each(function () {
+        var money = $(this).data("money");
+        var sl = $(this).data("sl");
+        $(this).html(sl + " x " + formatMoney(money));
+    })
+    $("#TotalCard").html("Tổng tiền : " + formatMoney($("#TotalCard").data("money")));
 </script>
