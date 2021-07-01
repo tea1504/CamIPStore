@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Entities.GioHang>
+@using Microsoft.AspNetCore.Http;
+@{ var total = 0.0; }
+@foreach (var item in Model)
+{
+    total += item.Sl * item.Camera.GiaBan;
+    var url = "http://placehold.it/200x300";
+    foreach (var img in item.Camera.DsHinh)
+    {
+        if (img.HinhDaiDien)
+            url = img.Link;
+    }
+    <li class="header-cart-item flex-w flex-t m-b-12">
+        <div data_idCam="@item.Camera.IdCam" class="DeleteCartItem header-cart-item-img">
+            <img src="@url" alt="IMG">
+        </div>
+
+        <div class="header-cart-item-txt p-t-8">
+            <a href="@Url.Action("ProductDetail", "Home", new { id = item.Camera.IdCam})" class="header-cart-item-name m-b-18 hov-cl1 trans-04">
+                @item.Camera.Ten
+            </a>
+
+            <span class="header-cart-item-info money" data-money="@item.Camera.GiaBan" data-sl="@item.Sl">
+                 
+            </span>
+        </div>
+    </li>
+}
+<div id="TotalCard" data-money="@total" class="header-cart-total w-full p-tb-40">
+    Total: @total
+</div>
+<script>
+    $(".DeleteCartItem").click(function (e) {
+        var IdKH = '@Context.Session.GetInt32("UserID")';
+        var IdCam = $(this)[0].getAttribute("data_idCam");
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("DeteleCartItem","Cart")',
+            data: {
+                IdTK: IdKH,
+                IdCam: IdCam
+            }
+        })
+            .done(function (e) {
+                if (e == 0) {
+                    swal("Lỗi", "Không thể xóa", "error");
+                }
+                $(".header-cart-wrapitem.w-full").load("/Cart/GetCartDetail/" + IdKH);
+            })
+    });
+    function formatMoney(val) {
+        var formatter = new Intl.NumberFormat();
+        return formatter.format(val) + " VNĐ";
+    }
+    $(".money").each(function () {
+        var money = $(this).data("money");
+        var sl = $(this).data("sl");
+        $(this).html(sl + " x " + formatMoney(money));
+    })
+    $("#TotalCard").html("Tổng tiền : " + formatMoney($("#TotalCard").data("money")));
+</script>

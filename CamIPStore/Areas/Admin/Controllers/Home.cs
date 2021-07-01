@@ -9,6 +9,7 @@ namespace CamIPStore.WebApp.Areas.Admin
     [Area("Admin")]
     public class Home : Controller
     {
+      
         public IActionResult Index()
         {
             return View();

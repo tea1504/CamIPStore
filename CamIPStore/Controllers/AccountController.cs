@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,38 +14,44 @@ namespace CamIPStore.WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private IPShopDBContext db;
-        [Authorize(Roles = "1")]
-        public async Task<IActionResult> Admin_account_list()
+        private readonly IPShopDBContext _db;
+        public AccountController(IPShopDBContext dbContext)
         {
-            return View(await db.TaiKhoan.ToListAsync());
+            _db = dbContext;
         }
 
         [HttpGet]
-        [Authorize(Roles ="1")]
-        public IActionResult Admin_account_create()
+        public IActionResult Login()
         {
-            TaiKhoan Acc = new TaiKhoan();
-            return View(Acc);
+            return View();
         }
-
         [HttpPost]
-        [Authorize(Roles ="1")]
-        public IActionResult Admin_account_create(TaiKhoan Acc)
+        [ValidateAntiForgeryToken]
+        public IActionResult Login([Bind("TenTK, MatKhau")] TaiKhoan model)
         {
-            TaiKhoan t = new TaiKhoan();
-            t.TenTK = Acc.TenTK;
-            t.MatKhau = Acc.MatKhau;
-            t.SDT = Acc.SDT;
-            t.DiaChi = Acc.DiaChi;
-            t.Email = Acc.Email;
-            t.HoTen = Acc.HoTen;
-            t.QuyenSD = Acc.QuyenSD;
-            t.TrangThai = true;
-            db.TaiKhoan.Add(t);
-            db.SaveChanges();
-            return RedirectToAction("Admin_account_list");
+            if (ModelState.IsValid)
+            {
+                if ((_db.TaiKhoan.Any(s => s.TenTK == model.TenTK)) && (_db.TaiKhoan.Any(s => s.MatKhau == model.MatKhau)))
+                {
+                    HttpContext.Session.SetString("UserName", model.TenTK);
+                    var taiKhoan = _db.TaiKhoan.FirstOrDefault(s => s.TenTK == model.TenTK);
+                    HttpContext.Session.SetInt32("UserID", taiKhoan.IdTK);
+                    if (_db.TaiKhoan.FirstOrDefault(s=>s.TenTK == model.TenTK).QuyenSD == false)
+                            return RedirectToAction("Index", "Home");
+                    
+                    else return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Tên đăng nhập hoặc Password không đúng!");
+                }
+            }
+            return View(model);
         }
-
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

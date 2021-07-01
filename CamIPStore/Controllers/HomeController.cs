@@ -1,5 +1,7 @@
 ﻿using CamIPStore.Models;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -12,15 +14,27 @@ namespace CamIPStore.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IPShopDBContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IPShopDBContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
         {
+            var compareDate = DateTime.Now;
+            ViewBag.slider = _context.KhuyenMai.Where(km => km.DenNgay >= compareDate).ToList();
+            ViewBag.banner = _context.NhaSanXuat.ToList();
             return View();
+        }
+
+        public async Task<IActionResult> ProductDetail(int? id)
+        {
+            var product = await _context.Cameras.Include(c => c.DsHinh).Include(c => c.NhaSanXuat).SingleOrDefaultAsync(c => c.IdCam == id);
+            ViewBag.RelatedProduct = await _context.Cameras.Include(c => c.DsHinh).Where(c => c.IdNSX == product.IdNSX && c.IdCam != product.IdCam).Take(8).ToListAsync();
+            return View(product);
         }
 
         public IActionResult Privacy()
@@ -32,6 +46,19 @@ namespace CamIPStore.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        public async Task<IActionResult> KhuyenMai(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var list = await _context.KhuyenMai
+                .Include(km => km.DsChiTietKhuyenMai)
+                .ThenInclude(ctkm => ctkm.Camera)
+                .ThenInclude(c => c.DsHinh)
+                .SingleOrDefaultAsync(km => km.IdKM == id);
+            return View(list);
         }
     }
 }
