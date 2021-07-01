@@ -30,6 +30,13 @@ namespace CamIPStore.Controllers
             return View();
         }
 
+        public async Task<IActionResult> ProductDetail(int? id)
+        {
+            var product = await _context.Cameras.Include(c => c.DsHinh).Include(c => c.NhaSanXuat).SingleOrDefaultAsync(c => c.IdCam == id);
+            ViewBag.RelatedProduct = await _context.Cameras.Include(c => c.DsHinh).Where(c => c.IdNSX == product.IdNSX && c.IdCam != product.IdCam).Take(8).ToListAsync();
+            return View(product);
+        }
+
         public IActionResult Privacy()
         {
             return View();
