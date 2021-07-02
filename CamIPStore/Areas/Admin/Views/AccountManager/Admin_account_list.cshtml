@@ -69,9 +69,8 @@
                 @(item.QuyenSD ? "Đang sd" : "Khóa")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.IdTK">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.IdTK">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.IdTK">Delete</a>
+                <a asp-action="Admin_account_edit" asp-route-id="@item.IdTK">Chỉnh sửa</a> |               
+                <a asp-action="Admin_account_ban" asp-route-id="@item.IdTK">Cấm</a>
             </td>
         </tr>
         }
