@@ -21,5 +21,23 @@ namespace CamIPStore.WebApp.Areas.Admin.Controllers
             var list = await _context.KhuyenMai.ToListAsync();
             return View(list);
         }
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var khuyenMai = await _context
+                                    .KhuyenMai
+                                    .Include(km => km.DsChiTietKhuyenMai)
+                                    .ThenInclude(ds => ds.Camera)
+                                    .Where(km => km.IdKM == id)
+                                    .SingleOrDefaultAsync();
+            if (khuyenMai == null)
+            {
+                return NotFound();
+            }
+            return View(khuyenMai);
+        }
     }
 }
