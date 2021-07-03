@@ -1,4 +1,4 @@
-﻿
+﻿@model 
 @{
     ViewData["Title"] = "Khuyến mãi";
     Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
@@ -26,20 +26,51 @@
     <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
     <script>
         $(function () {
-            $("#example1").DataTable({
-                "responsive": true, "lengthChange": false, "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+            $("#myTable").DataTable({
+                data: [
+                    {
+                        "name": "Tiger Nixon",
+                        "position": "System Architect",
+                        "salary": "$3,120",
+                        "start_date": "2011/04/25",
+                        "office": "Edinburgh",
+                        "extn": "5421"
+                    },
+                    {
+                        "name": "Garrett Winters",
+                        "position": "Director",
+                        "salary": "$5,300",
+                        "start_date": "2011/07/25",
+                        "office": "Edinburgh",
+                        "extn": "8422"
+                    }
+                ],
+                columns: [
+                    { data: 'name' },
+                    { data: 'position' },
+                    { data: 'salary' },
+                    { data: 'office' }
+                ]
             });
         });
     </script>
 }
 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="myTable">
+                    <thead>
+                        <th>Tên</th>
+                        <th>Vị trí</th>
+                        <th>Lương</th>
+                        <th>Văn phòng</th>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
