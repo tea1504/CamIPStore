@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,9 +16,10 @@ namespace CamIPStore.WebApp.Areas.Admin.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var list = await _context.KhuyenMai.ToListAsync();
+            return View(list);
         }
     }
 }
