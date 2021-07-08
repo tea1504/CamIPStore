@@ -1,0 +1,103 @@
+﻿@model Entities.KhuyenMai
+
+@{
+    ViewData["Title"] = "Tạo mới khuyến mãi";
+    Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
+}
+@section Style{ }
+@section Script{
+    <script>
+        const listCamera = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listCam) as String);
+        var list = [];
+        function renderList() {
+            list.sort((a, b) => {
+                return a.IdCam - b.IdCam;
+            })
+            var html =
+                `
+                <table class="table table-head-fixed">
+                    <thead>
+                        <tr>
+                            <th>
+                                ID camera
+                            </th>
+                            <th>
+                                Tên camera
+                            </th>
+                            <th width="150px">
+                                Ảnh
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                <tbody>
+            `
+            list.forEach((e, i) => {
+                html +=
+                    `
+                    <tr>
+                        <td>
+                            ${e.IdCam}
+                        </td>
+                        <td>
+                            ${e.Ten}
+                        </td>
+                        <td>
+                            <img class="img-fluid" src="${e.Link}" alt="${e.Ten}" />
+                        </td>
+                        <td>
+                            <a onclick="Delete(${e.IdCam})" class="btnDel btn btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+                `
+            })
+            html +=
+                `
+                </tbody>
+            `
+            $(".reviewCam").html(html);
+        }
+        $("#addCam").on("click", function (e) {
+            e.preventDefault();
+            var idCam = $("#IdCam").val();
+            var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
+            if (indexCam != -1) {
+                var camera = listCamera[indexCam];
+                var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
+                if(index == -1)
+                list.push(camera);
+            }
+            renderList();
+            $("#IdCam").val("");
+        });
+        function Delete(id) {
+            var indexCam = list.findIndex(cam => cam.IdCam == id);
+            list.splice(indexCam, 1);
+            renderList();
+        }
+    </script>
+}
+
+<div class="card">
+    <div class="card-body">
+        <form>
+            <hr />
+            <div class="form-group">
+                <label for="IdCam">Chọn danh sách camera</label>
+                <select name="IdCam" id="IdCam" class="form-control">
+                    <option value="" selected>Chọn camera</option>
+                    @foreach (var item in ViewBag.Camera)
+                    {
+                <option value="@item.IdCam">@item.IdCam | @item.Ten</option>
+                    }
+                </select>
+            </div>
+            <button id="addCam" class="btn btn-success">Thêm camera</button>
+            <div class="reviewCam mt-3 table-responsive" style="max-height:500px">
+
+            </div>
+        </form>
+    </div>
+</div>
+
+

@@ -4,52 +4,281 @@
     ViewData["Title"] = "Detail";
     Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
 }
+@section Style{
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!--FancyBox-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
+          integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <style>
+        img {
+            max-height: 100%;
+        }
+    </style>
+}
+@section Script{
+    <!-- DataTables  & Plugins -->
+    <script src="/Assets/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/jszip/jszip.min.js"></script>
+    <script src="/Assets/Admin/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/Assets/Admin/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!--FancyBox-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+            integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script>
+        console.log(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.dsCam) as String));
+        $(function () {
+            $("#myTable").DataTable({
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.dsCam) as String),
+                columns: [
+                    {
+                        data: 'c.Ten',
+                        className: "align-middle",
+                        render: function (data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'c.GiaGoc',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var formatter = new Intl.NumberFormat();
+                            return formatter.format(data) + " VNĐ";
+                        }
+                    },
+                    {
+                        data: 'c.GiaBan',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var formatter = new Intl.NumberFormat();
+                            return formatter.format(data) + " VNĐ";
+                        }
+                    },
+                    {
+                        data: 'GiamGia',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var formatter = new Intl.NumberFormat();
+                            return formatter.format(row.c.GiaBan * (100 - row.PhanTramGiam) / 100.0) + " VNĐ";
+                        }
+                    },
+                    {
+                        data: 'Action',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            return `<a class="btn btn-primary" href="/Home/ProductDetail/${row.c.IdCam}">Chi tiết</a>`;
+                        }
+                    },
+                ],
+                language: {
+                    "processing": "Đang xử lý...",
+                    "infoFiltered": "(được lọc từ _MAX_ mục)",
+                    "aria": {
+                        "sortAscending": ": Sắp xếp thứ tự tăng dần",
+                        "sortDescending": ": Sắp xếp thứ tự giảm dần"
+                    },
+                    "autoFill": {
+                        "cancel": "Hủy",
+                        "fill": "Điền tất cả ô với <i>%d<\/i>",
+                        "fillHorizontal": "Điền theo hàng ngang",
+                        "fillVertical": "Điền theo hàng dọc",
+                        "info": "Mẫu thông tin tự động điền"
+                    },
+                    "buttons": {
+                        "collection": "Chọn lọc <span class=\"ui-button-icon-primary ui-icon ui-icon-triangle-1-s\"><\/span>",
+                        "colvis": "Hiển thị theo cột",
+                        "colvisRestore": "Khôi phục hiển thị",
+                        "copy": "Sao chép",
+                        "copyKeys": "Nhấn Ctrl hoặc u2318 + C để sao chép bảng dữ liệu vào clipboard.<br \/><br \/>Để hủy, click vào thông báo này hoặc nhấn ESC",
+                        "copySuccess": {
+                            "1": "Đã sao chép 1 dòng dữ liệu vào clipboard",
+                            "_": "Đã sao chép %d dòng vào clipboard"
+                        },
+                        "copyTitle": "Sao chép vào clipboard",
+                        "csv": "File CSV",
+                        "excel": "File Excel",
+                        "pageLength": {
+                            "-1": "Xem tất cả các dòng",
+                            "1": "Hiển thị 1 dòng",
+                            "_": "Hiển thị %d dòng"
+                        },
+                        "pdf": "File PDF",
+                        "print": "In ấn"
+                    },
+                    "infoPostFix": "Đang hiển thị dòng _START_ tới dòng _END_ trong tổng số _TOTAL_ mục",
+                    "infoThousands": "`",
+                    "select": {
+                        "1": "%d dòng đang được chọn",
+                        "_": "%d dòng đang được chọn",
+                        "cells": {
+                            "1": "1 ô đang được chọn",
+                            "_": "%d ô đang được chọn"
+                        },
+                        "columns": {
+                            "1": "1 cột đang được chọn",
+                            "_": "%d cột đang được được chọn"
+                        },
+                        "rows": {
+                            "1": "1 dòng đang được chọn",
+                            "_": "%d dòng đang được chọn"
+                        }
+                    },
+                    "thousands": "`",
+                    "searchBuilder": {
+                        "title": {
+                            "_": "Thiết lập tìm kiếm (%d)",
+                            "0": "Thiết lập tìm kiếm"
+                        },
+                        "button": {
+                            "0": "Thiết lập tìm kiếm",
+                            "_": "Thiết lập tìm kiếm (%d)"
+                        },
+                        "value": "Giá trị",
+                        "clearAll": "Xóa hết",
+                        "condition": "Điều kiện",
+                        "conditions": {
+                            "date": {
+                                "after": "Sau",
+                                "before": "Trước",
+                                "between": "Nằm giữa",
+                                "empty": "Rỗng",
+                                "equals": "Bằng với",
+                                "not": "Không phải",
+                                "notBetween": "Không nằm giữa",
+                                "notEmpty": "Không rỗng"
+                            },
+                            "number": {
+                                "between": "Nằm giữa",
+                                "empty": "Rỗng",
+                                "equals": "Bằng với",
+                                "gt": "Lớn hơn",
+                                "gte": "Lớn hơn hoặc bằng",
+                                "lt": "Nhỏ hơn",
+                                "lte": "Nhỏ hơn hoặc bằng",
+                                "not": "Không phải",
+                                "notBetween": "Không nằm giữa",
+                                "notEmpty": "Không rỗng"
+                            },
+                            "string": {
+                                "contains": "Chứa",
+                                "empty": "Rỗng",
+                                "endsWith": "Kết thúc bằng",
+                                "equals": "Bằng",
+                                "not": "Không phải",
+                                "notEmpty": "Không rỗng",
+                                "startsWith": "Bắt đầu với"
+                            }
+                        },
+                        "logicAnd": "Và",
+                        "logicOr": "Hoặc",
+                        "add": "Thêm điều kiện",
+                        "data": "Dữ liệu",
+                        "deleteTitle": "Xóa quy tắc lọc"
+                    },
+                    "searchPanes": {
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Không có phần tìm kiếm",
+                        "clearMessage": "Xóa hết",
+                        "loadMessage": "Đang load phần tìm kiếm",
+                        "collapse": {
+                            "0": "Phần tìm kiếm",
+                            "_": "Phần tìm kiếm (%d)"
+                        },
+                        "title": "Bộ lọc đang hoạt động - %d",
+                        "count": "{total}"
+                    },
+                    "datetime": {
+                        "hours": "Giờ",
+                        "minutes": "Phút",
+                        "next": "Sau",
+                        "previous": "Trước",
+                        "seconds": "Giây"
+                    },
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị _START_ tới _END_ của _TOTAL_ dữ liệu",
+                    "infoEmpty": "Hiển thị 0 tới 0 của 0 dữ liệu",
+                    "lengthMenu": "Hiển thị _MENU_ dữ liệu",
+                    "loadingRecords": "Đang tải...",
+                    "paginate": {
+                        "first": "Đầu tiên",
+                        "last": "Cuối cùng",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy kết quả"
+                }
+            });
+        });
+    </script>
+}
 
-<h1>Detail</h1>
-
-<div>
-    <h4>KhuyenMai</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IdKM)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdKM)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TenKM)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TenKM)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PhanTramGiam)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PhanTramGiam)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TuNgay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TuNgay)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DenNgay)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DenNgay)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Banner)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Banner)
-        </dd>
-    </dl>
+<div class="card" style="max-height: 75vh">
+    <div class="card-body h-100 overflow-auto">
+        <div class="row h-100">
+            <div class="col-md-6 h-100">
+                <table class="table table-borderless">
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.TenKM):</th>
+                        <td>@Model.TenKM</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.PhanTramGiam):</th>
+                        <td>@Model.PhanTramGiam %</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.TuNgay):</th>
+                        <td>@Model.TuNgay</td>
+                    </tr>
+                    <tr>
+                        <th>@Html.DisplayNameFor(model => model.DenNgay):</th>
+                        <td>@Model.DenNgay</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <a href="@Url.Action("Index", "KhuyenMai")" class="btn btn-block btn-outline-secondary">Trở về</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            @{
+                var url = "http://placehold.it/1000x500";
+                url = (Model.Banner == "" || Model.Banner == null) ? url : Model.Banner;
+            }
+            <div class="col-md-6 h-100 text-center">
+                <a href="@url" data-fancybox data-caption="@Model.TenKM">
+                    <img src="@url" alt="@Model.TenKM" class="img-fluid" />
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
+<div class="card">
+    <div class="card-body">
+        <table id="myTable" class="table">
+            <thead>
+                <tr>
+                    <th>Tên camera</th>
+                    <th>Giá gốc</th>
+                    <th>Giá bán trước giảm</th>
+                    <th>Giá bán sau giảm</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>

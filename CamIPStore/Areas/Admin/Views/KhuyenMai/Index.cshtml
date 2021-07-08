@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!--FancyBox-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
+          integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
 }
 @section Script{
     <!-- DataTables  & Plugins -->
@@ -24,6 +29,11 @@
     <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
     <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
     <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!--FancyBox-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+            integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
     <script>
         $(function () {
             $("#myTable").DataTable({
@@ -40,9 +50,13 @@
                         data: 'Banner',
                         className: "align-middle text-center",
                         render: function (data, type, row) {
-                            var src = "http://placehold.it/200x200";
+                            var src = "http://placehold.it/1000x500";
                             src = (data) ? data : src;
-                            return `<img src=${src} class="img-fluid" alt="${row.TenKM}" />`;
+                            return `
+                                <a href=${src} data-fancybox="gallery" data-caption="${row.TenKM}">
+                                    <img src=${src} class="img-fluid" alt="${row.TenKM}" />
+                                </a>
+                            `;
                         }
                      },
                     {
@@ -81,7 +95,9 @@
                         data: 'Action',
                         className: "align-middle text-center",
                         render: function (data, type, row) {
-                            return 1;
+                            return `
+                                <a href="/Admin/KhuyenMai/Detail/${row.IdKM}">Chi tiết<a/>
+                            `;
                         }
                     },
                 ],
