@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -59,8 +60,26 @@ namespace CamIPStore.WebApp.Areas.Admin.Controllers
                 )
                 .Where(c => c.HinhDaiDien == true)
                 .ToListAsync();
-            ViewBag.Camera = await _context.Cameras.ToListAsync();
+            ViewBag.Camera = await _context
+                                    .Cameras
+                                    .Select(c => new SelectListItem() { Text = c.IdCam + " | " + c.Ten, Value = c.IdCam.ToString()})
+                                    .ToListAsync();
             return View();
+        }
+        [HttpPost, ActionName("Create")]
+        public async Task<IActionResult> Create(KhuyenMai khuyenMai, List<string> listIDKM, IFormFile Banner)
+        {
+            if(Banner != null)
+            {
+                
+            }
+            else
+            {
+                ViewBag.BannerErr = "Bạn chưa chọn banner";
+                ViewBag.listIDKM = listIDKM;
+                return View("Create", khuyenMai);
+            }
+            return Redirect("Index");
         }
     }
 }

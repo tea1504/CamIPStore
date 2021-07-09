@@ -17,6 +17,7 @@ namespace Entities
         [Required(ErrorMessage = "Bạn phải nhập tên khuyến mãi")]
         public string TenKM { get; set; }
         [Display(Name = "Phần trăm giảm")]
+        [Range(minimum: 0, maximum: 100, ErrorMessage = "Phần trăm giảm từ 0 đến 100")]
         [Required(ErrorMessage = "Bạn phải nhập phần trăm giảm")]
         public int PhanTramGiam { get; set; }
         [Display(Name = "Ngày bắt đầu")]

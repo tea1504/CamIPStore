@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="~/Assets/Admin/plugins/daterangepicker/daterangepicker.css">
     <!-- summernote -->
     <link rel="stylesheet" href="~/Assets/Admin/plugins/summernote/summernote-bs4.min.css">
+    <!-- sweet alert 2 -->
+    <link href="~/Assets/Admin/plugins/sweetalert2/sweetalert2.css" rel="stylesheet" />
     @RenderSection("Style", true)
 </head>
 <body class="layout-fixed layout-navbar-fixed layout-footer-fixed sidebar-mini">
@@ -41,24 +43,24 @@
         <!-- Main Sidebar Container -->
         @Html.Partial("SideBar.cshtml")
         <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <h1 class="m-0">@ViewData["title"]</h1>
-                    </div><!-- /.col -->
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                @RenderBody()
+        <div class="content-wrapper">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <h1 class="m-0">@ViewData["title"]</h1>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
             </div>
-        </section>
-        <!-- /.content -->
-    </div>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
         <!-- /.content-wrapper -->
 
         @Html.Partial("Footer.cshtml")
@@ -101,13 +103,17 @@
     <script src="~/Assets/Admin/dist/js/demo.js"></script>
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     <script src="~/Assets/Admin/dist/js/pages/dashboard.js"></script>
+    <!-- sweet alert 2 -->
+    <script src="~/Assets/Admin/plugins/sweetalert2/sweetalert2.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script>
-    (function titleScroller(text) {
-        document.title = text;
-        setTimeout(function () {
-            titleScroller(text.substr(1) + text.substr(0, 1));
-        }, 500);
-    }(document.title));
+        (function titleScroller(text) {
+            document.title = text;
+            setTimeout(function () {
+                titleScroller(text.substr(1) + text.substr(0, 1));
+            }, 500);
+        }(document.title));
     </script>
     @RenderSection("Script", true)
 </body>
