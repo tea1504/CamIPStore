@@ -7,8 +7,19 @@
 @section Style{ }
 @section Script{
     <script>
-        const listCamera = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listCam) as String);
+        @{
+            var list = ViewBag.listIDKM==null?new List<string>(): ViewBag.listIDKM;
+        }
         var list = [];
+        var listAvaiable = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(list) as String);
+        const listCamera = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listCam) as String);
+        if (listAvaiable.length != 0) {
+            listAvaiable.forEach((e, i) => {
+                var index = listCamera.findIndex((e1) => e1.IdCam == e);
+                list.push(listCamera[index]);
+                renderList();
+            })
+        }
         function renderList() {
             list.sort((a, b) => {
                 return a.IdCam - b.IdCam;
@@ -33,7 +44,7 @@
                 <tbody>
             `
             var html2 = "";
-            list.forEach((e, i) => {
+                    list.forEach((e, i) => {
                 html +=
                     `
                     <tr>
@@ -66,49 +77,49 @@
             $("#hidden").html(html2);
         }
         $("#addCam").on("click", function (e) {
-            e.preventDefault();
-            var idCam = $("#IdCam").val();
-            if (idCam) {
-                var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
-                if (indexCam != -1) {
-                    var camera = listCamera[indexCam];
-                    var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
-                    if (index == -1)
-                        list.push(camera);
-                    else {
-                        Swal.fire({
+                e.preventDefault();
+                var idCam = $("#IdCam").val();
+                if (idCam) {
+                    var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
+                    if (indexCam != -1) {
+                        var camera = listCamera[indexCam];
+                        var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
+                        if (index == -1)
+                            list.push(camera);
+                        else {
+                            Swal.fire({
                             title: 'Cảnh báo',
                             text: 'Bạn đã chọn ' + camera.Ten,
                             imageUrl: camera.Link,
                             imageAlt: camera.Ten,
                         });
+                        }
                     }
-                }
-                renderList();
+                    renderList();
                 $("#IdCam").val("");
-            }
-            else {
-                Swal.fire(
-                    'Cảnh báo',
-                    'Bạn chưa chọn camera',
-                    'warning'
-                );
-            }
-        });
-        function Delete(id) {
-            var indexCam = list.findIndex(cam => cam.IdCam == id);
-            list.splice(indexCam, 1);
-            if (list.length == 0)
+                }
+                else {
+                    Swal.fire(
+                        'Cảnh báo',
+                        'Bạn chưa chọn camera',
+                        'warning'
+                    );
+                }
+            });
+            function Delete(id) {
+                var indexCam = list.findIndex(cam => cam.IdCam == id);
+                list.splice(indexCam, 1);
+                if (list.length == 0)
                 $(".reviewCam").html("");
             else
-                renderList();
-        }
+                    renderList();
+            }
         $("#TuNgay").on("change", function (e) {
             $("#DenNgay").attr("min", e.target.value);
-        });
+            });
         $("#DenNgay").on("change", function (e) {
             $("#TuNgay").attr("max", e.target.value);
-        });
+            });
     </script>
 }
 
@@ -147,11 +158,13 @@
                 <select asp-items="ViewBag.Camera" name="IdCam" id="IdCam" class="form-control">
                     <option value="">Chọn camera</option>
                 </select>
+                <span class="text-danger">@ViewBag.ListErr</span>
             </div>
             <button id="addCam" class="btn btn-success">Thêm camera</button>
             <div class="reviewCam mt-3 table-responsive" style="max-height:500px"></div>
             <div id="hidden"></div>
             <button class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Trở về</a>
         </form>
     </div>
 </div>

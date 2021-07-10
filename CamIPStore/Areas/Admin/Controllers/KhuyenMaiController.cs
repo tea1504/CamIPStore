@@ -1,10 +1,12 @@
 ﻿using Entities;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -69,17 +71,65 @@ namespace CamIPStore.WebApp.Areas.Admin.Controllers
         [HttpPost, ActionName("Create")]
         public async Task<IActionResult> Create(KhuyenMai khuyenMai, List<string> listIDKM, IFormFile Banner)
         {
-            if(Banner != null)
+            if(Banner == null)
             {
-                
-            }
-            else
-            {
+                ViewBag.listCam = await _context
+                .Cameras
+                .Join(
+                    _context.Hinh,
+                    c => c.IdCam,
+                    h => h.IdCam,
+                    (cam, img) => new { cam.Ten, cam.IdCam, img.Link, img.HinhDaiDien }
+                )
+                .Where(c => c.HinhDaiDien == true)
+                .ToListAsync();
+                ViewBag.Camera = await _context
+                                        .Cameras
+                                        .Select(c => new SelectListItem() { Text = c.IdCam + " | " + c.Ten, Value = c.IdCam.ToString() })
+                                        .ToListAsync();
                 ViewBag.BannerErr = "Bạn chưa chọn banner";
                 ViewBag.listIDKM = listIDKM;
                 return View("Create", khuyenMai);
             }
-            return Redirect("Index");
+            if(listIDKM.Count == 0)
+            {
+                ViewBag.listCam = await _context
+                .Cameras
+                .Join(
+                    _context.Hinh,
+                    c => c.IdCam,
+                    h => h.IdCam,
+                    (cam, img) => new { cam.Ten, cam.IdCam, img.Link, img.HinhDaiDien }
+                )
+                .Where(c => c.HinhDaiDien == true)
+                .ToListAsync();
+                ViewBag.Camera = await _context
+                                        .Cameras
+                                        .Select(c => new SelectListItem() { Text = c.IdCam + " | " + c.Ten, Value = c.IdCam.ToString() })
+                                        .ToListAsync();
+                ViewBag.ListErr = "Bạn chưa chọn sản phẩm";
+                return View("Create", khuyenMai);
+            }
+            var path = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot/Images/Banner",
+                Banner.FileName);
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await Banner.CopyToAsync(stream);
+            }
+            khuyenMai.Banner = "/Images/Banner/" + Banner.FileName;
+            _context.KhuyenMai.Add(khuyenMai);
+            var create = _context.SaveChanges();
+            List<ChiTietKhuyenMai> chiTietKhuyenMais = new List<ChiTietKhuyenMai>();
+            foreach(var item in listIDKM)
+            {
+                ChiTietKhuyenMai chiTietKhuyenMai = new ChiTietKhuyenMai() { IdKM = khuyenMai.IdKM, IdCam = Int16.Parse(item) };
+                chiTietKhuyenMais.Add(chiTietKhuyenMai);
+            }
+            _context.ChiTietKhuyenMai.AddRange(chiTietKhuyenMais);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
     }
 }
