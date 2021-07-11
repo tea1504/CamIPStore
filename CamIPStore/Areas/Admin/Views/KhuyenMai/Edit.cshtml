@@ -1,11 +1,11 @@
 ﻿@model Entities.KhuyenMai
 
 @{
-    ViewData["Title"] = "Tạo mới khuyến mãi";
+    ViewData["Title"] = "Edit";
     Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
 }
-@section Style{ }
-@section Script{
+@section Style { }
+@section Script { 
     <script>
         @{
             var list = ViewBag.listIDKM==null?new List<string>(): ViewBag.listIDKM;
@@ -77,43 +77,42 @@
             $("#hidden").html(html2);
         }
         $("#addCam").on("click", function (e) {
-                e.preventDefault();
-                var idCam = $("#IdCam").val();
-                if (idCam) {
-                    var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
-                    if (indexCam != -1) {
-                        var camera = listCamera[indexCam];
-                        var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
-                        if (index == -1)
-                            list.push(camera);
-                        else {
-                            Swal.fire({
+            e.preventDefault();
+            var idCam = $("#IdCam").val();
+            if (idCam) {
+                var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
+                if (indexCam != -1) {
+                    var camera = listCamera[indexCam];
+                    var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
+                    if (index == -1)
+                        list.push(camera);
+                    else {
+                        Swal.fire({
                             title: 'Cảnh báo',
                             text: 'Bạn đã chọn ' + camera.Ten,
                             imageUrl: camera.Link,
                             imageAlt: camera.Ten,
                         });
-                        }
                     }
-                    renderList();
+                }
+                renderList();
                 $("#IdCam").val("");
-                }
-                else {
-                    Swal.fire(
-                        'Cảnh báo',
-                        'Bạn chưa chọn camera',
-                        'warning'
-                    );
-                }
-            });
-            function Delete(id) {
-                var indexCam = list.findIndex(cam => cam.IdCam == id);
-                list.splice(indexCam, 1);
-                if (list.length == 0)
-                $(".reviewCam").html("");
-            else
-                    renderList();
             }
+            else {
+                Swal.fire(
+                    'Cảnh báo',
+                    'Bạn chưa chọn camera',
+                    'warning'
+                );
+            }
+        });
+        function Delete(id) {
+            var indexCam = list.findIndex(cam => cam.IdCam == id);
+            list.splice(indexCam, 1);
+            renderList();
+            if (list.length == 0)
+                $(".reviewCam").html("");
+        }
         $("#TuNgay").on("change", function (e) {
             $("#DenNgay").attr("min", e.target.value);
             });
@@ -128,10 +127,9 @@
         })
     </script>
 }
-
 <div class="card">
     <div class="card-body">
-        <form method="post" enctype="multipart/form-data" asp-controller="KhuyenMai" asp-action="Create">
+        <form method="post" enctype="multipart/form-data" asp-controller="KhuyenMai" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="TenKM" class="control-label"></label>
@@ -155,9 +153,9 @@
             </div>
             <div class="form-group">
                 <label asp-for="Banner" class="control-label"></label>
-                <input name="Banner" id="Banner" type="file" class="form-control"/>
+                <input name="Banner" id="Banner" type="file" class="form-control" />
                 <p class="text-center mt-3">
-                    <img id="review" style="max-height: 150px" />
+                    <img id="review" src="@Model.Banner" style="max-height: 150px" />
                 </p>
                 <span class="text-danger">@ViewBag.BannerErr</span>
             </div>
@@ -177,5 +175,3 @@
         </form>
     </div>
 </div>
-
-

@@ -96,7 +96,22 @@
                         className: "align-middle text-center",
                         render: function (data, type, row) {
                             return `
-                                <a href="/Admin/KhuyenMai/Detail/${row.IdKM}">Chi tiết<a/>
+                                <a
+                                    href="/Admin/KhuyenMai/Detail/${row.IdKM}" 
+                                    class="btn btn-outline-success btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Xem chi tiết">
+                                    <i class="fas fa-info-circle"></i>
+                                <a/>
+                                <a
+                                    href="/Admin/KhuyenMai/Edit/${row.IdKM}" 
+                                    class="btn btn-outline-success btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                <a/>
                             `;
                         }
                     },
@@ -238,12 +253,16 @@
                     },
                     "search": "Tìm kiếm:",
                     "zeroRecords": "Không tìm thấy kết quả"
-                }
+                },
+                "lengthMenu": [
+                    [5, 10, 15, 20, 25, 50, 100, -1],
+                    [5, 10, 15, 20, 25, 50, 100, "Tất cả"]
+                ]
             });
         });
     </script>
 }
-<a asp-action="Create">Tạo mới</a>
+<a asp-action="Create" class="btn btn-primary mb-3">Tạo mới</a>
 <div class="row">
     <div class="col-12">
         <div class="card">
