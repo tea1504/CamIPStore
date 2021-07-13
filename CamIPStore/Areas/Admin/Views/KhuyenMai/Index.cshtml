@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<Entities.KhuyenMai>
 @{
-    ViewData["Title"] = "Khuyến mãi";
+    ViewData["Title"] = "Danh sách khuyến mãi";
     Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
 }
 
@@ -14,6 +14,12 @@
           integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw=="
           crossorigin="anonymous"
           referrerpolicy="no-referrer" />
+<style>
+    .swal-bg{
+        background-image: linear-gradient(red, blue);
+        color: red;
+    }
+</style>
 }
 @section Script{
     <!-- DataTables  & Plugins -->
@@ -54,7 +60,7 @@
                             src = (data) ? data : src;
                             return `
                                 <a href=${src} data-fancybox="gallery" data-caption="${row.TenKM}">
-                                    <img src=${src} class="img-fluid" alt="${row.TenKM}" />
+                                    <img src=${src} class="img-fluid" style="max-height: 65px" alt="${row.TenKM}" />
                                 </a>
                             `;
                         }
@@ -98,7 +104,7 @@
                             return `
                                 <a
                                     href="/Admin/KhuyenMai/Detail/${row.IdKM}" 
-                                    class="btn btn-outline-success btn-sm"
+                                    class="btn btn-outline-primary btn-sm"
                                     data-toggle="tooltip"
                                     data-placement="top"
                                     title="Xem chi tiết">
@@ -111,6 +117,15 @@
                                     data-placement="top"
                                     title="Chỉnh sửa">
                                     <i class="fas fa-edit"></i>
+                                <a/>
+                                <a
+                                    href="#" 
+                                    class="btn btn-outline-danger btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Xóa"
+                                    onclick="Delete(${row.IdKM}, '${row.TenKM}', '${row.Banner}')">
+                                    <i class="fas fa-trash"></i>
                                 <a/>
                             `;
                         }
@@ -260,6 +275,26 @@
                 ]
             });
         });
+        function Delete(id, ten, img) {
+            Swal.fire({
+                title: `<p style="text-shadow: white 0px 0px 10px, white 0px 0px 15px, white 0px 0px 20px; color: #000;">Xác nhận</p>`,
+                icon: "info",
+                html: `<p style="text-shadow: white 0px 0px 10px, white 0px 0px 15px, white 0px 0px 20px; color: #000;">Bạn có chắc chắn muốn xóa khuyến mãi ${ten}</p>`,
+                background: `center / cover no-repeat #fff url(${img})`,
+                showDenyButton: true,
+                showCancelButton: true,
+                showConfirmButton: false,
+                denyButtonText: `Xóa`,
+                cancelButtonText: `Hủy`,
+                customClass: "swal-bg",
+            }).then((result) => {
+                if (result.isDismissed) {
+                    Swal.fire('Đã hủy xóa', '', 'info')
+                } else if (result.isDenied) {
+                    window.location.href = `/Admin/KhuyenMai/Delete/${id}`;
+                }
+            });
+        }
     </script>
 }
 <a asp-action="Create" class="btn btn-primary mb-3">Tạo mới</a>
@@ -271,7 +306,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th>@Html.DisplayNameFor(model => model.IdKM)</th>
-                            <th witdh="20%">@Html.DisplayNameFor(model => model.Banner)</th>
+                            <th>@Html.DisplayNameFor(model => model.Banner)</th>
                             <th>@Html.DisplayNameFor(model => model.TenKM)</th>
                             <th>@Html.DisplayNameFor(model => model.PhanTramGiam)</th>
                             <th>@Html.DisplayNameFor(model => model.TuNgay)</th>

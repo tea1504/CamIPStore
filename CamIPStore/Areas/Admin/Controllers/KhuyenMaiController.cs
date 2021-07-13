@@ -235,6 +235,79 @@ namespace CamIPStore.WebApp.Areas.Admin.Controllers
                         "see your system administrator.");
                 }
             }
+            else
+            {
+                try
+                {
+                    if (Banner != null)
+                    {
+                        if (khuyenMai.Banner != null && khuyenMai.Banner != "")
+                        {
+                            var path = Path.Combine(
+                                Directory.GetCurrentDirectory(),
+                                "wwwroot",
+                                khuyenMai.Banner.Substring(1));
+                            if (System.IO.File.Exists(path))
+                            {
+                                System.IO.File.Delete(path);
+                            }
+                        }
+                        var path2 = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot/Images/Banner",
+                            Banner.FileName);
+                        using (var stream = new FileStream(path2, FileMode.Create))
+                        {
+                            await Banner.CopyToAsync(stream);
+                        }
+                        khuyenMai.Banner = "/Images/Banner/" + Banner.FileName;
+                    }
+                    _context.KhuyenMai.Update(khuyenMai);
+                    var listIDKM_old = await _context.ChiTietKhuyenMai.Where(ctkm => ctkm.IdKM == id).ToListAsync();
+                    _context.ChiTietKhuyenMai.RemoveRange(listIDKM_old);
+                    var listCTKM = new List<ChiTietKhuyenMai>();
+                    foreach (var item in listIDKM)
+                    {
+                        var CTKM = new ChiTietKhuyenMai() { IdKM = khuyenMai.IdKM, IdCam = Int16.Parse(item) };
+                        listCTKM.Add(CTKM);
+                    }
+                    _context.ChiTietKhuyenMai.AddRange(listCTKM);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (DbUpdateException /* ex */)
+                {
+                    //Log the error (uncomment ex variable name and write a log.)
+                    ModelState.AddModelError("", "Unable to save changes. " +
+                        "Try again, and if the problem persists, " +
+                        "see your system administrator.");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            KhuyenMai khuyenMai = await _context.KhuyenMai.SingleOrDefaultAsync(km => km.IdKM == id);
+            if(khuyenMai == null){
+                return NotFound();
+            }
+            var listCTKM = await _context.ChiTietKhuyenMai.Where(ctkm => ctkm.IdKM == id).ToListAsync();
+            _context.ChiTietKhuyenMai.RemoveRange(listCTKM);
+            await _context.SaveChangesAsync();
+            var path = Path.Combine(
+                            Directory.GetCurrentDirectory(),
+                            "wwwroot",
+                            khuyenMai.Banner.Substring(1));
+            if (System.IO.File.Exists(path))
+            {
+                System.IO.File.Delete(path);
+            }
+            _context.KhuyenMai.Remove(khuyenMai);
+            await _context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }

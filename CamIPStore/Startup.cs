@@ -65,7 +65,7 @@ namespace CamIPStore
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{area=Admin}/{controller=KhuyenMai}/{action=Edit}/{id=11}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
