@@ -1,0 +1,181 @@
+﻿@model Entities.KhuyenMai
+
+@{
+    ViewData["Title"] = "Tạo mới khuyến mãi";
+    Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
+}
+@section Style{ }
+@section Script{
+    <script>
+        @{
+            var list = ViewBag.listIDKM==null?new List<string>(): ViewBag.listIDKM;
+        }
+        var list = [];
+        var listAvaiable = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(list) as String);
+        const listCamera = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewBag.listCam) as String);
+        if (listAvaiable.length != 0) {
+            listAvaiable.forEach((e, i) => {
+                var index = listCamera.findIndex((e1) => e1.IdCam == e);
+                list.push(listCamera[index]);
+                renderList();
+            })
+        }
+        function renderList() {
+            list.sort((a, b) => {
+                return a.IdCam - b.IdCam;
+            })
+            var html =
+                `
+                <table class="table table-head-fixed">
+                    <thead>
+                        <tr>
+                            <th>
+                                ID camera
+                            </th>
+                            <th>
+                                Tên camera
+                            </th>
+                            <th width="150px">
+                                Ảnh
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                <tbody>
+            `
+            var html2 = "";
+                    list.forEach((e, i) => {
+                html +=
+                    `
+                    <tr>
+                        <td>
+                            ${e.IdCam}
+                        </td>
+                        <td>
+                            ${e.Ten}
+                        </td>
+                        <td>
+                            <img class="img-fluid" src="${e.Link}" alt="${e.Ten}" />
+                        </td>
+                        <td>
+                            <a onclick="Delete(${e.IdCam})" class="btnDel btn btn-danger">Xóa</a>
+                        </td>
+                    </tr>
+                `
+                html2 +=
+                `
+                    <text>
+                        <input type="hidden" name="listIDKM[${i}]" value="${e.IdCam}" />
+                    </text>
+                `
+            })
+            html +=
+                `
+                </tbody>
+            `
+            $(".reviewCam").html(html);
+            $("#hidden").html(html2);
+        }
+        $("#addCam").on("click", function (e) {
+                e.preventDefault();
+                var idCam = $("#IdCam").val();
+                if (idCam) {
+                    var indexCam = listCamera.findIndex(cam => cam.IdCam == idCam);
+                    if (indexCam != -1) {
+                        var camera = listCamera[indexCam];
+                        var index = list.findIndex(cam => cam.IdCam == camera.IdCam);
+                        if (index == -1)
+                            list.push(camera);
+                        else {
+                            Swal.fire({
+                            title: 'Cảnh báo',
+                            text: 'Bạn đã chọn ' + camera.Ten,
+                            imageUrl: camera.Link,
+                            imageAlt: camera.Ten,
+                        });
+                        }
+                    }
+                    renderList();
+                $("#IdCam").val("");
+                }
+                else {
+                    Swal.fire(
+                        'Cảnh báo',
+                        'Bạn chưa chọn camera',
+                        'warning'
+                    );
+                }
+            });
+            function Delete(id) {
+                var indexCam = list.findIndex(cam => cam.IdCam == id);
+                list.splice(indexCam, 1);
+                if (list.length == 0)
+                $(".reviewCam").html("");
+            else
+                    renderList();
+            }
+        $("#TuNgay").on("change", function (e) {
+            $("#DenNgay").attr("min", e.target.value);
+            });
+        $("#DenNgay").on("change", function (e) {
+            $("#TuNgay").attr("max", e.target.value);
+        });
+        $("#Banner").on("change", function (e) {
+            var file = e.target.files[0];
+            if (file) {
+                review.src = URL.createObjectURL(file)
+            }
+        })
+    </script>
+}
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" asp-controller="KhuyenMai" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TenKM" class="control-label"></label>
+                <input name="TenKM" id="TenKM" asp-for="TenKM" class="form-control" />
+                <span asp-validation-for="TenKM" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhanTramGiam" class="control-label"></label>
+                <input name="PhanTramGiam" id="PhanTramGiam" asp-for="PhanTramGiam" class="form-control" />
+                <span asp-validation-for="PhanTramGiam" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TuNgay" class="control-label"></label>
+                <input name="TuNgay" id="TuNgay" type="date" asp-for="TuNgay" class="form-control" />
+                <span asp-validation-for="TuNgay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DenNgay" class="control-label"></label>
+                <input name="DenNgay" id="DenNgay" type="date" asp-for="DenNgay" min="" class="form-control" />
+                <span asp-validation-for="DenNgay" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Banner" class="control-label"></label>
+                <input name="Banner" id="Banner" type="file" class="form-control"/>
+                <p class="text-center mt-3">
+                    <img id="review" style="max-height: 150px" />
+                </p>
+                <span class="text-danger">@ViewBag.BannerErr</span>
+            </div>
+            <hr />
+            <div class="form-group">
+                <label for="IdCam">Chọn danh sách camera</label>
+                <select asp-items="ViewBag.Camera" name="IdCam" id="IdCam" class="form-control">
+                    <option value="">Chọn camera</option>
+                </select>
+                <span class="text-danger">@ViewBag.ListErr</span>
+            </div>
+            <button id="addCam" class="btn btn-success">Thêm camera</button>
+            <div class="reviewCam mt-3 table-responsive" style="max-height:500px"></div>
+            <div id="hidden"></div>
+            <button class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Trở về</a>
+        </form>
+    </div>
+</div>
+
+

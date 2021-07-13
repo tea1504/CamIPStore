@@ -1,0 +1,324 @@
+﻿@model IEnumerable<Entities.KhuyenMai>
+@{
+    ViewData["Title"] = "Danh sách khuyến mãi";
+    Layout = "~/Areas/Admin/Views/Share/_Layout.cshtml";
+}
+
+@section Style{
+    <!-- DataTables -->
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/Assets/Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+    <!--FancyBox-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css"
+          integrity="sha512-H9jrZiiopUdsLpg94A333EfumgUBpO9MdbxStdeITo+KEIMaNfHNvwyjjDJb+ERPaRS6DpyRlKbvPUasNItRyw=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+<style>
+    .swal-bg{
+        background-image: linear-gradient(red, blue);
+        color: red;
+    }
+</style>
+}
+@section Script{
+    <!-- DataTables  & Plugins -->
+    <script src="/Assets/Admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/Assets/Admin/plugins/jszip/jszip.min.js"></script>
+    <script src="/Assets/Admin/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/Assets/Admin/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/Assets/Admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <!--FancyBox-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"
+            integrity="sha512-uURl+ZXMBrF4AwGaWmEetzrd+J5/8NRkWAvJx5sbPSSuOb0bZLqf+tOzniObO00BjHa/dD7gub9oCGMLPQHtQA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"></script>
+    <script>
+        $(function () {
+            $("#myTable").DataTable({
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model) as String),
+                columns: [
+                    {
+                        data: 'IdKM',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            return data;
+                        }
+                    },
+                    {
+                        data: 'Banner',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var src = "http://placehold.it/1000x500";
+                            src = (data) ? data : src;
+                            return `
+                                <a href=${src} data-fancybox="gallery" data-caption="${row.TenKM}">
+                                    <img src=${src} class="img-fluid" style="max-height: 65px" alt="${row.TenKM}" />
+                                </a>
+                            `;
+                        }
+                     },
+                    {
+                        data: 'TenKM',
+                        className: "align-middle",
+                        render: function (data, type, row) {
+                            return data;
+                        }
+                     },
+                    {
+                        data: 'PhanTramGiam',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            return data + "%";
+                        }
+                     },
+                    {
+                        data: 'TuNgay',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var arrDate = data.split('-');
+                            var date = new Date(arrDate[0], eval(arrDate[1]) - 1, arrDate[2].slice(0, 2));
+                            return date.toLocaleDateString("vn");
+                        }
+                     },
+                    {
+                        data: 'DenNgay',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            var arrDate = data.split('-');
+                            var date = new Date(arrDate[0], eval(arrDate[1]) - 1, arrDate[2].slice(0, 2));
+                            return date.toLocaleDateString("vn");
+                        }
+                    },
+                    {
+                        data: 'Action',
+                        className: "align-middle text-center",
+                        render: function (data, type, row) {
+                            return `
+                                <a
+                                    href="/Admin/KhuyenMai/Detail/${row.IdKM}" 
+                                    class="btn btn-outline-primary btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Xem chi tiết">
+                                    <i class="fas fa-info-circle"></i>
+                                <a/>
+                                <a
+                                    href="/Admin/KhuyenMai/Edit/${row.IdKM}" 
+                                    class="btn btn-outline-success btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                <a/>
+                                <a
+                                    href="#" 
+                                    class="btn btn-outline-danger btn-sm"
+                                    data-toggle="tooltip"
+                                    data-placement="top"
+                                    title="Xóa"
+                                    onclick="Delete(${row.IdKM}, '${row.TenKM}', '${row.Banner}')">
+                                    <i class="fas fa-trash"></i>
+                                <a/>
+                            `;
+                        }
+                    },
+                ],
+                language: {
+                    "processing": "Đang xử lý...",
+                    "infoFiltered": "(được lọc từ _MAX_ mục)",
+                    "aria": {
+                        "sortAscending": ": Sắp xếp thứ tự tăng dần",
+                        "sortDescending": ": Sắp xếp thứ tự giảm dần"
+                    },
+                    "autoFill": {
+                        "cancel": "Hủy",
+                        "fill": "Điền tất cả ô với <i>%d<\/i>",
+                        "fillHorizontal": "Điền theo hàng ngang",
+                        "fillVertical": "Điền theo hàng dọc",
+                        "info": "Mẫu thông tin tự động điền"
+                    },
+                    "buttons": {
+                        "collection": "Chọn lọc <span class=\"ui-button-icon-primary ui-icon ui-icon-triangle-1-s\"><\/span>",
+                        "colvis": "Hiển thị theo cột",
+                        "colvisRestore": "Khôi phục hiển thị",
+                        "copy": "Sao chép",
+                        "copyKeys": "Nhấn Ctrl hoặc u2318 + C để sao chép bảng dữ liệu vào clipboard.<br \/><br \/>Để hủy, click vào thông báo này hoặc nhấn ESC",
+                        "copySuccess": {
+                            "1": "Đã sao chép 1 dòng dữ liệu vào clipboard",
+                            "_": "Đã sao chép %d dòng vào clipboard"
+                        },
+                        "copyTitle": "Sao chép vào clipboard",
+                        "csv": "File CSV",
+                        "excel": "File Excel",
+                        "pageLength": {
+                            "-1": "Xem tất cả các dòng",
+                            "1": "Hiển thị 1 dòng",
+                            "_": "Hiển thị %d dòng"
+                        },
+                        "pdf": "File PDF",
+                        "print": "In ấn"
+                    },
+                    "infoPostFix": "Đang hiển thị dòng _START_ tới dòng _END_ trong tổng số _TOTAL_ mục",
+                    "infoThousands": "`",
+                    "select": {
+                        "1": "%d dòng đang được chọn",
+                        "_": "%d dòng đang được chọn",
+                        "cells": {
+                            "1": "1 ô đang được chọn",
+                            "_": "%d ô đang được chọn"
+                        },
+                        "columns": {
+                            "1": "1 cột đang được chọn",
+                            "_": "%d cột đang được được chọn"
+                        },
+                        "rows": {
+                            "1": "1 dòng đang được chọn",
+                            "_": "%d dòng đang được chọn"
+                        }
+                    },
+                    "thousands": "`",
+                    "searchBuilder": {
+                        "title": {
+                            "_": "Thiết lập tìm kiếm (%d)",
+                            "0": "Thiết lập tìm kiếm"
+                        },
+                        "button": {
+                            "0": "Thiết lập tìm kiếm",
+                            "_": "Thiết lập tìm kiếm (%d)"
+                        },
+                        "value": "Giá trị",
+                        "clearAll": "Xóa hết",
+                        "condition": "Điều kiện",
+                        "conditions": {
+                            "date": {
+                                "after": "Sau",
+                                "before": "Trước",
+                                "between": "Nằm giữa",
+                                "empty": "Rỗng",
+                                "equals": "Bằng với",
+                                "not": "Không phải",
+                                "notBetween": "Không nằm giữa",
+                                "notEmpty": "Không rỗng"
+                            },
+                            "number": {
+                                "between": "Nằm giữa",
+                                "empty": "Rỗng",
+                                "equals": "Bằng với",
+                                "gt": "Lớn hơn",
+                                "gte": "Lớn hơn hoặc bằng",
+                                "lt": "Nhỏ hơn",
+                                "lte": "Nhỏ hơn hoặc bằng",
+                                "not": "Không phải",
+                                "notBetween": "Không nằm giữa",
+                                "notEmpty": "Không rỗng"
+                            },
+                            "string": {
+                                "contains": "Chứa",
+                                "empty": "Rỗng",
+                                "endsWith": "Kết thúc bằng",
+                                "equals": "Bằng",
+                                "not": "Không phải",
+                                "notEmpty": "Không rỗng",
+                                "startsWith": "Bắt đầu với"
+                            }
+                        },
+                        "logicAnd": "Và",
+                        "logicOr": "Hoặc",
+                        "add": "Thêm điều kiện",
+                        "data": "Dữ liệu",
+                        "deleteTitle": "Xóa quy tắc lọc"
+                    },
+                    "searchPanes": {
+                        "countFiltered": "{shown} ({total})",
+                        "emptyPanes": "Không có phần tìm kiếm",
+                        "clearMessage": "Xóa hết",
+                        "loadMessage": "Đang load phần tìm kiếm",
+                        "collapse": {
+                            "0": "Phần tìm kiếm",
+                            "_": "Phần tìm kiếm (%d)"
+                        },
+                        "title": "Bộ lọc đang hoạt động - %d",
+                        "count": "{total}"
+                    },
+                    "datetime": {
+                        "hours": "Giờ",
+                        "minutes": "Phút",
+                        "next": "Sau",
+                        "previous": "Trước",
+                        "seconds": "Giây"
+                    },
+                    "emptyTable": "Không có dữ liệu",
+                    "info": "Hiển thị _START_ tới _END_ của _TOTAL_ dữ liệu",
+                    "infoEmpty": "Hiển thị 0 tới 0 của 0 dữ liệu",
+                    "lengthMenu": "Hiển thị _MENU_ dữ liệu",
+                    "loadingRecords": "Đang tải...",
+                    "paginate": {
+                        "first": "Đầu tiên",
+                        "last": "Cuối cùng",
+                        "next": "Sau",
+                        "previous": "Trước"
+                    },
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy kết quả"
+                },
+                "lengthMenu": [
+                    [5, 10, 15, 20, 25, 50, 100, -1],
+                    [5, 10, 15, 20, 25, 50, 100, "Tất cả"]
+                ]
+            });
+        });
+        function Delete(id, ten, img) {
+            Swal.fire({
+                title: `<p style="text-shadow: white 0px 0px 10px, white 0px 0px 15px, white 0px 0px 20px; color: #000;">Xác nhận</p>`,
+                icon: "info",
+                html: `<p style="text-shadow: white 0px 0px 10px, white 0px 0px 15px, white 0px 0px 20px; color: #000;">Bạn có chắc chắn muốn xóa khuyến mãi ${ten}</p>`,
+                background: `center / cover no-repeat #fff url(${img})`,
+                showDenyButton: true,
+                showCancelButton: true,
+                showConfirmButton: false,
+                denyButtonText: `Xóa`,
+                cancelButtonText: `Hủy`,
+                customClass: "swal-bg",
+            }).then((result) => {
+                if (result.isDismissed) {
+                    Swal.fire('Đã hủy xóa', '', 'info')
+                } else if (result.isDenied) {
+                    window.location.href = `/Admin/KhuyenMai/Delete/${id}`;
+                }
+            });
+        }
+    </script>
+}
+<a asp-action="Create" class="btn btn-primary mb-3">Tạo mới</a>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="myTable" class="table w-100 table-bordered table-striped table-hover table-head-fixed">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>@Html.DisplayNameFor(model => model.IdKM)</th>
+                            <th>@Html.DisplayNameFor(model => model.Banner)</th>
+                            <th>@Html.DisplayNameFor(model => model.TenKM)</th>
+                            <th>@Html.DisplayNameFor(model => model.PhanTramGiam)</th>
+                            <th>@Html.DisplayNameFor(model => model.TuNgay)</th>
+                            <th>@Html.DisplayNameFor(model => model.DenNgay)</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="h-100 overflow-auto"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
