@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace CamIPStore.WebApp.Controllers
 {
@@ -68,6 +69,17 @@ namespace CamIPStore.WebApp.Controllers
                 return 1;
             }
             return 0;
+        }
+        public async Task<IActionResult> Index()
+        {
+            var IdTK = HttpContext.Session.GetInt32("UserID");
+            var listDonHang = await _context
+                                        .GioHang
+                                        .Where(gh => gh.IdTK == IdTK)
+                                        .Include(gh => gh.Camera)
+                                        .ThenInclude(cam => cam.DsHinh)
+                                        .ToListAsync();
+            return View(listDonHang);
         }
     }
 }
