@@ -23,7 +23,8 @@ namespace CamIPStore.WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            TaiKhoan i = new TaiKhoan();
+            return View(i);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
